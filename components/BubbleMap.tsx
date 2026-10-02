@@ -156,10 +156,11 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
     beginGesture();
   }
   function selectNode(id: string) {
-    if (suppressClick.current) return;
+    if (suppressClick.current || demoRunning) return;
     setHovered(null); setSelected(id);
   }
   function markDone(id: string) {
+    if (demoRunning) return;
     const step = roadmap.find((item) => item.id === id);
     if (!step || getState(step, completed) !== "available") return;
     const next = new Set(completed); next.add(id);
@@ -182,6 +183,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
     setShowPassDemo(false);
     setDemoRunning(true);
     setSelected(null);
+    setAnnouncement("Demo is lighting up your arrival steps…");
     const byId = new Map(roadmap.map((step) => [step.id, step]));
     const selectedIds = new Set<string>();
     const addWithPrerequisites = (id: string) => {
@@ -214,7 +216,6 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
       setStorageWarning(!saveCompletedIds(next));
       const lightingUp = roadmap.filter((item) => getState(item, previous) === "locked" && getState(item, next) === "available");
       setNewlyUnlocked(new Set([step.id, ...lightingUp.map((item) => item.id)]));
-      setAnnouncement(`${step.shortTitle} verified in the demo`);
       if (!reducedMotion) await new Promise((resolve) => setTimeout(resolve, 140));
     }
     setDemoRunning(false);
