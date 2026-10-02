@@ -248,7 +248,8 @@
     "category": "visa",
     "phase": "before",
     "prerequisites": [
-      "founder_visa"
+      "founder_visa",
+      "degree_attestation"
     ],
     "appliesIf": {},
     "mustDoBeforeFlying": false,
@@ -294,7 +295,12 @@
     "category": "visa",
     "phase": "landing",
     "prerequisites": [
-      "entry_permit"
+      "entry_permit",
+      "medication_check",
+      "temp_accommodation",
+      "community_join",
+      "ramadan_and_norms",
+      "pet_import_permit"
     ],
     "appliesIf": {},
     "mustDoBeforeFlying": false,
@@ -357,7 +363,8 @@
     "category": "identity",
     "phase": "landing",
     "prerequisites": [
-      "biometrics"
+      "biometrics",
+      "golden_visa_check"
     ],
     "appliesIf": {},
     "mustDoBeforeFlying": false,

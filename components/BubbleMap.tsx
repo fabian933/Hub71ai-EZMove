@@ -3,16 +3,26 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { criticalPath, downstreamUnlockCounts, getDoByDate, getState, loadCompletedIds, personalise, saveCompletedIds } from "@/lib/engine";
-import { categoryStyles, descendants, layoutMap, settlementSteps } from "@/lib/map";
+import { categoryStyles, descendants, layoutMap, settlementSteps, type MapNode } from "@/lib/map";
 import { countryName } from "@/lib/profile";
+import { loadChosenArea, saveChosenArea } from "@/lib/areas";
 import type { Profile, Step } from "@/lib/schema";
 import Icon from "./Icon";
 import NodeDrawer from "./NodeDrawer";
 
 type View = { x: number; y: number; scale: number };
 type PhaseFilter = Step["phase"] | "all";
-const phases: { value: PhaseFilter; label: string }[] = [{ value: "all", label: "All" }, { value: "before", label: "Before you fly" }, { value: "landing", label: "Landing" }, { value: "settling", label: "Settling" }, { value: "living", label: "Living" }];
-const clampScale = (value: number) => Math.min(2.8, Math.max(0.14, value));
+const phases: { value: PhaseFilter; label: string }[] = [{ value: "all", label: "All" }, { value: "before", label: "Before you arrive" }, { value: "landing", label: "Landed" }, { value: "settling", label: "Settling" }, { value: "living", label: "Living" }];
+const clampScale = (value: number) => Math.min(2.8, Math.max(0.06, value));
+function fittedView(nodes: readonly MapNode[], viewport: { width: number; height: number }): View {
+  if (!nodes.length) return { x: viewport.width / 2, y: viewport.height / 2, scale: 1 };
+  const minX = Math.min(...nodes.map((node) => node.x - node.radius - 36));
+  const maxX = Math.max(...nodes.map((node) => node.x + node.radius + 36));
+  const minY = Math.min(...nodes.map((node) => node.y - node.radius - 36));
+  const maxY = Math.max(...nodes.map((node) => node.y + node.radius + 36));
+  const scale = clampScale(Math.min((viewport.width - 32) / (maxX - minX), (viewport.height - 44) / (maxY - minY), 1.15));
+  return { x: viewport.width / 2 - (minX + maxX) / 2 * scale, y: viewport.height / 2 - (minY + maxY) / 2 * scale, scale };
+}
 
 export default function BubbleMap({ profile }: { profile: Profile }) {
   const reducedMotion = useReducedMotion();
@@ -31,6 +41,9 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   const [storageWarning, setStorageWarning] = useState(false);
   const [copied, setCopied] = useState(false);
   const [listOpen, setListOpen] = useState(false);
+  const [chosenArea, setChosenArea] = useState<string | null>(null);
+  const [showPassDemo, setShowPassDemo] = useState(false);
+  const [demoRunning, setDemoRunning] = useState(false);
   const stage = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);
   const viewRef = useRef(view);
@@ -41,6 +54,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   const gesture = useRef<{ x: number; y: number; view: View; distance: number; moved: boolean } | null>(null);
   const suppressClick = useRef(false);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const demoCancelled = useRef(false);
   const updateView = useCallback((next: View) => { viewRef.current = next; setView(next); }, []);
   const counts = useMemo(() => downstreamUnlockCounts(roadmap, completed), [roadmap, completed]);
   const criticalIds = useMemo(() => new Set(criticalPath(roadmap, completed).map((step) => step.id)), [roadmap, completed]);
@@ -57,7 +71,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   const closeDrawer = useCallback(() => setSelected(null), []);
   const categories = [...new Set(roadmap.map((step) => step.category))];
 
-  useEffect(() => { setCompleted(loadCompletedIds()); setLoaded(true); }, []);
+  useEffect(() => { setCompleted(loadCompletedIds()); setChosenArea(loadChosenArea()); setLoaded(true); }, []);
   useEffect(() => {
     if (!stage.current) return;
     const observer = new ResizeObserver(([entry]) => {
@@ -68,7 +82,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
       const current = viewRef.current;
       if (!hasSized.current) {
         hasSized.current = true;
-        updateView({ x: next.width / 2, y: next.height / 2, scale: next.width < 600 ? 0.66 : Math.min(0.8, next.height / 820) });
+        updateView(fittedView(layout.nodes, next));
       } else {
         updateView({ ...current, x: current.x + (next.width - previousSize.width) / 2, y: current.y + (next.height - previousSize.height) / 2 });
       }
@@ -77,8 +91,8 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
     return () => observer.disconnect();
   // The observer owns viewport changes; the initial size is intentionally captured once.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateView]);
-  useEffect(() => () => { if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
+  }, [updateView, layout]);
+  useEffect(() => () => { demoCancelled.current = true; if (flashTimer.current) clearTimeout(flashTimer.current); }, []);
   useEffect(() => {
     const element = svg.current;
     if (!element) return;
@@ -94,21 +108,10 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
     element.addEventListener("wheel", onWheel, { passive: false });
     return () => element.removeEventListener("wheel", onWheel);
   }, [updateView]);
-  function fitMap() {
-    if (!visible.length) return;
-    const minX = Math.min(...visible.map((node) => node.x - node.radius - 35));
-    const maxX = Math.max(...visible.map((node) => node.x + node.radius + 35));
-    const minY = Math.min(...visible.map((node) => node.y - node.radius - 35));
-    const maxY = Math.max(...visible.map((node) => node.y + node.radius + 35));
-    const scale = clampScale(Math.min((size.width - 32) / (maxX - minX), (size.height - 64) / (maxY - minY), 1.15));
-    updateView({ x: size.width / 2 - (minX + maxX) / 2 * scale, y: size.height / 2 - (minY + maxY) / 2 * scale, scale });
-  }
+  function fitMap() { updateView(fittedView(visible, sizeRef.current)); }
   useEffect(() => {
     if (firstPhase.current) { firstPhase.current = false; return; }
-    if (phase === "all") {
-      const viewport = sizeRef.current;
-      updateView({ x: viewport.width / 2, y: viewport.height / 2, scale: viewport.width < 600 ? 0.66 : Math.min(0.8, viewport.height / 820) });
-    } else fitMap();
+    fitMap();
   // Fit only when the chosen phase changes, not on pointer movement.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
@@ -170,13 +173,62 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => setNewlyUnlocked(new Set()), 3200);
   }
+  function chooseArea(id: string) {
+    setChosenArea(id);
+    setStorageWarning(!saveChosenArea(id));
+    setAnnouncement("Area saved. School suggestions now follow your choice.");
+  }
+  async function completePassDemo() {
+    setShowPassDemo(false);
+    setDemoRunning(true);
+    setSelected(null);
+    const byId = new Map(roadmap.map((step) => [step.id, step]));
+    const selectedIds = new Set<string>();
+    const addWithPrerequisites = (id: string) => {
+      const step = byId.get(id);
+      if (!step || selectedIds.has(id)) return;
+      selectedIds.add(id);
+      step.prerequisites.forEach(addWithPrerequisites);
+    };
+    roadmap.filter((step) => step.phase === "before" || step.phase === "landing").forEach((step) => addWithPrerequisites(step.id));
+    addWithPrerequisites("emirates_id");
+    addWithPrerequisites("uae_pass");
+    const ordered: Step[] = [];
+    const visited = new Set<string>();
+    const visit = (id: string) => {
+      if (visited.has(id)) return;
+      visited.add(id);
+      const step = byId.get(id);
+      step?.prerequisites.filter((prerequisite) => selectedIds.has(prerequisite)).forEach(visit);
+      if (step && selectedIds.has(id)) ordered.push(step);
+    };
+    selectedIds.forEach(visit);
+    let next = new Set(completed);
+    for (const step of ordered) {
+      if (demoCancelled.current) break;
+      if (next.has(step.id)) continue;
+      const previous = next;
+      next = new Set(next);
+      next.add(step.id);
+      setCompleted(next);
+      setStorageWarning(!saveCompletedIds(next));
+      const lightingUp = roadmap.filter((item) => getState(item, previous) === "locked" && getState(item, next) === "available");
+      setNewlyUnlocked(new Set([step.id, ...lightingUp.map((item) => item.id)]));
+      setAnnouncement(`${step.shortTitle} verified in the demo`);
+      if (!reducedMotion) await new Promise((resolve) => setTimeout(resolve, 140));
+    }
+    setDemoRunning(false);
+    setAnnouncement("UAE Pass demo complete. Your next steps are ready.");
+    if (flashTimer.current) clearTimeout(flashTimer.current);
+    flashTimer.current = setTimeout(() => setNewlyUnlocked(new Set()), 3200);
+  }
   async function shareMap() {
     try { await navigator.clipboard.writeText(window.location.href); setCopied(true); }
     catch { setAnnouncement("Copy the address in your browser to share this map."); }
   }
   function isDimmed(id: string) { return (hovered && id !== hovered && !downstream.has(id)) || (showCritical && !criticalIds.has(id)); }
   return <main className="map-page">
-    <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>Your Abu Dhabi roadmap</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}</span></div></div><div className="map-header-actions"><Link href="/" className="edit-profile">Edit profile</Link><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></div></header>
+    <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>Your Abu Dhabi roadmap</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions"><button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button><Link href="/" className="edit-profile">Edit profile</Link><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></div></header>
     <div className="map-toolbar"><div className="phase-filters" aria-label="Filter by phase">{phases.map((item) => <button key={item.value} className={phase === item.value ? "active" : ""} aria-pressed={phase === item.value} onClick={() => { setPhase(item.value); setHovered(null); }}>{item.label}</button>)}</div><div className="toolbar-right"><button className={`critical-toggle ${showCritical ? "active" : ""}`} aria-pressed={showCritical} onClick={() => setShowCritical(!showCritical)}><Icon name="spark" size={14} />Critical path</button><div className="settlement-progress"><div><span>{completed.has("settled") ? "Settled" : "To settled"}</span><b>{progress}%</b></div><div className="progress-track" role="progressbar" aria-label="Progress to settled" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><motion.div animate={{ width: `${progress}%` }} transition={{ duration: reducedMotion ? 0 : 0.6 }} /></div></div></div></div>
     <div className="map-stage" ref={stage}>
       <div className="map-caption"><span className="eyebrow">YOUR MOVE, CONNECTED</span><h1>{phase === "all" ? "One step opens the next." : phases.find((item) => item.value === phase)?.label}</h1><p>{showCritical ? "Your longest remaining route to settled." : "Tap a bubble to see what comes next."}</p></div>
@@ -205,12 +257,12 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
                 <title>{`Unlocks ${counts[node.id]} steps: ${[...descendants(node.id, roadmap)].filter((id) => !completed.has(id)).map((id) => roadmap.find((step) => step.id === id)?.shortTitle).join(", ") || "none"}`}</title>
                 {state === "available" && <motion.circle className="availability-halo" r={node.radius + 6} fill={color} filter="url(#bubble-glow)" initial={{ opacity: 0.1 }} animate={reducedMotion ? { opacity: 0.13 } : { opacity: [0.08, 0.23, 0.08], r: [node.radius + 3, node.radius + 12, node.radius + 3] }} transition={{ duration: 3.2, repeat: Infinity, delay: (node.radius % 5) / 3 }} />}
                 {flash && <motion.circle r={node.radius + 8} fill="none" stroke={color} strokeWidth="3" initial={{ r: node.radius, opacity: 1 }} animate={{ r: node.radius + 50, opacity: 0 }} transition={{ duration: reducedMotion ? 0 : 1.15, repeat: 2 }} />}
-                <motion.circle r={node.radius} animate={{ fill: state === "done" ? color : state === "available" ? "#213b34" : "#20312c", stroke: color, strokeOpacity: state === "locked" ? 0.22 : 0.8 }} transition={{ duration: reducedMotion ? 0 : 0.5 }} strokeWidth={node.id === "emirates_id" ? 2 : 1.3} />
+                <motion.circle r={node.radius} animate={{ fill: node.id === "emirates_id" ? "#b7f3da" : state === "done" ? color : state === "available" ? "#213b34" : "#20312c", stroke: color, strokeOpacity: node.id === "emirates_id" ? 1 : state === "locked" ? 0.22 : 0.8 }} transition={{ duration: reducedMotion ? 0 : 0.5 }} strokeWidth={node.id === "emirates_id" ? 2 : 1.3} />
                 {node.id === "emirates_id" && <circle r={node.radius - 7} fill="none" stroke={color} strokeOpacity=".13" />}
-                {state === "locked" && <g transform={`translate(-6 ${-node.radius + 13})`} opacity=".6" style={{ color }}><Icon name="lock" size={12} /></g>}
-                {state === "done" && <g transform={`translate(-7 ${-node.radius + 13})`} style={{ color: "#18362b" }}><Icon name="check" size={14} /></g>}
-                <text textAnchor="middle" fill={state === "done" ? "#18362b" : state === "locked" ? "#a0b3a9" : color} fontSize={node.id === "emirates_id" ? 23 : node.radius > 53 ? 15 : 13} fontWeight={node.id === "emirates_id" ? 600 : 500} pointerEvents="none">{lines.map((line, index) => <tspan key={index} x="0" y={(index - (lines.length - 1) / 2) * (node.id === "emirates_id" ? 28 : 18) + 5}>{line}</tspan>)}</text>
-                {node.id === "emirates_id" && <text textAnchor="middle" y="51" fontSize="10" letterSpacing="1.2" fill={state === "done" ? "#315949" : "#81c8ae"}>YOUR CENTRAL HUB</text>}
+                {state === "locked" && <g transform={`translate(${node.radius * 0.69} ${-node.radius * 0.69})`} pointerEvents="none"><circle r="12" fill="#193328" stroke={color} strokeWidth="1.5" /><g transform="translate(-7 -7)" style={{ color }}><Icon name="lock" size={14} /></g></g>}
+                {state === "done" && <g transform={`translate(${node.radius * 0.69} ${-node.radius * 0.69})`} pointerEvents="none"><circle r="12" fill="#193328" stroke={color} strokeWidth="1.5" /><g transform="translate(-7 -7)" style={{ color }}><Icon name="check" size={14} /></g></g>}
+                <text textAnchor="middle" fill={node.id === "emirates_id" || state === "done" ? "#18362b" : state === "locked" ? "#a0b3a9" : color} fontSize={node.id === "emirates_id" ? 23 : node.radius > 53 ? 15 : 13} fontWeight={node.id === "emirates_id" ? 600 : 500} pointerEvents="none">{lines.map((line, index) => <tspan key={index} x="0" y={(index - (lines.length - 1) / 2) * (node.id === "emirates_id" ? 28 : 18) + 5}>{line}</tspan>)}</text>
+                {node.id === "emirates_id" && <text textAnchor="middle" y="51" fontSize="10" letterSpacing="1.2" fill="#315949">YOUR CENTRAL HUB</text>}
                 {deadline && <g transform={`translate(-49 ${node.radius - 5})`} pointerEvents="none"><rect width="98" height="22" rx="11" fill="#e5d3b1" /><text x="49" y="14.5" textAnchor="middle" fontSize="9.5" fill="#3b3529">do by {new Date(`${deadline}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })}</text></g>}
               </g>
             </motion.g>;
@@ -225,7 +277,8 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
     <footer className="map-legend"><div className="category-legend">{categories.map((category) => <span key={category}><i style={{ background: categoryStyles[category].color }} />{categoryStyles[category].label}</span>)}</div><div className="state-legend"><span><i className="legend-done" />Done</span><span><i className="legend-ready" />Available</span><span><Icon name="lock" size={11} />Locked</span></div></footer>
     {storageWarning && <div className="storage-warning" role="status">Progress is kept for this visit. Browser storage is unavailable.</div>}
     {!loaded && <span className="sr-only">Loading saved progress</span>}
-    <AnimatePresence>{selectedStep && <NodeDrawer key="step-drawer" step={selectedStep} roadmap={roadmap} profile={profile} completed={completed} onClose={closeDrawer} onDone={markDone} onSelect={setSelected} />}</AnimatePresence>
+    <AnimatePresence>{selectedStep && <NodeDrawer key="step-drawer" step={selectedStep} roadmap={roadmap} profile={profile} completed={completed} chosenArea={chosenArea} onChooseArea={chooseArea} onClose={closeDrawer} onDone={markDone} onSelect={setSelected} />}</AnimatePresence>
+    <AnimatePresence>{showPassDemo && <motion.div className="pass-demo-scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowPassDemo(false)}><motion.div className="pass-demo-modal" role="dialog" aria-modal="true" aria-labelledby="pass-demo-title" initial={{ y: 20, scale: .97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: .97 }} onClick={(event) => event.stopPropagation()} onKeyDown={(event) => { if (event.key === "Escape") setShowPassDemo(false); }}><div className="pass-demo-icon"><Icon name="check" size={25} /></div><span className="eyebrow">IDENTITY DEMO</span><h2 id="pass-demo-title">Demo — production uses UAE Pass OAuth</h2><p>This preview marks your arrival and identity steps complete, then lights up what they unlock. No credentials are requested.</p><div className="pass-demo-actions"><button onClick={() => setShowPassDemo(false)}>Cancel</button><button autoFocus onClick={completePassDemo}>Continue demo <Icon name="chevron" size={14} /></button></div></motion.div></motion.div>}</AnimatePresence>
     <AnimatePresence>{listOpen && <><motion.div className="drawer-scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setListOpen(false)} /><motion.aside className="node-drawer step-list" initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}><div className="drawer-top"><h2>Your steps</h2><button className="icon-button" aria-label="Close step list" onClick={() => setListOpen(false)}><Icon name="close" /></button></div>{visible.map((node) => <button className="step-list-item" key={node.id} onClick={() => { setListOpen(false); setSelected(node.id); }}><i style={{ background: categoryStyles[node.step.category].color }} /><span>{node.step.shortTitle}<small>{getState(node.step, completed)}</small></span><Icon name="chevron" size={15} /></button>)}</motion.aside></>}</AnimatePresence>
   </main>;
 }

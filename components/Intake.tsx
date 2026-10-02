@@ -14,7 +14,7 @@ function Choices<T extends string | number | boolean>({ label, value, items, onC
   </div></fieldset>;
 }
 
-export default function Intake({ moveMonth }: { moveMonth: string }) {
+export default function Intake({ moveMonth, demoMoveMonth }: { moveMonth: string; demoMoveMonth: string }) {
   const router = useRouter();
   const [profile, setProfile] = useState<Profile>(() => defaultProfile(moveMonth));
   const [sentence, setSentence] = useState("");
@@ -30,9 +30,9 @@ export default function Intake({ moveMonth }: { moveMonth: string }) {
     setProfile((previous) => ({ ...previous, [key]: value }));
   };
   const demos: { label: string; profile: Profile }[] = [
-    { label: "Solo Indian professional", profile: { ...defaultProfile(moveMonth), nationality: "IN" } },
-    { label: "British couple + 2 kids", profile: { ...defaultProfile(moveMonth), nationality: "GB", household: "family", kids: 2 } },
-    { label: "Nigerian Hub71 founder", profile: { ...defaultProfile(moveMonth), nationality: "NG", reason: "hub71_founder" } },
+    { label: "Solo Indian professional", profile: { ...defaultProfile(demoMoveMonth), nationality: "IN" } },
+    { label: "British couple + 2 kids", profile: { ...defaultProfile(demoMoveMonth), nationality: "GB", household: "family", kids: 2 } },
+    { label: "Nigerian Hub71 founder", profile: { ...defaultProfile(demoMoveMonth), nationality: "NG", reason: "hub71_founder" } },
   ];
   async function parseSentence() {
     if (!sentence.trim() || parsing) return;

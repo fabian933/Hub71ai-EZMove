@@ -3,7 +3,7 @@ import { downstreamUnlockCounts } from "./engine";
 import type { Step } from "./schema";
 
 export const categoryStyles: Record<Step["category"], { label: string; color: string }> = {
-  before_you_fly: { label: "Before you fly", color: "#ecd4a8" },
+  before_you_fly: { label: "Before you arrive", color: "#ecd4a8" },
   identity: { label: "Identity", color: "#a3ecd0" },
   visa: { label: "Visa", color: "#f3b7a4" },
   housing: { label: "Housing", color: "#accbf5" },

@@ -84,6 +84,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .map-header-actions { display: flex; align-items: center; gap: 22px; }
 .edit-profile { font-size: 10px; color: #98ad99; }
 .share-button { display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #4f6850; background: #2a4232; border-radius: 7px; padding: 9px 13px; color: #c6d9bf; font-size: 10px; }
+.uae-pass-button { border: 1px solid #a7dbb8; background: #b7f3da; color: #214936; border-radius: 7px; padding: 10px 13px; font-size: 10px; font-weight: 700; white-space: nowrap; box-shadow: 0 0 18px #a7ecca20; }
+.uae-pass-button:hover:not(:disabled) { background: #d1ffe7; }
+.hub71-badge { white-space: nowrap; background: #4b6449; border: 1px solid #86a271; border-radius: 20px; color: #d8eac2; padding: 6px 10px; font-size: 9px; letter-spacing: .3px; }
 .map-toolbar { padding: 15px 28px; flex-shrink: 0; display: flex; justify-content: space-between; gap: 20px; align-items: center; background: #1b3229; border-bottom: 1px solid #3b52423b; }
 .phase-filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
 .phase-filters::-webkit-scrollbar { display: none; }
@@ -129,6 +132,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .legend-done { background: #b6d7a9; }
 .legend-ready { border: 1px solid #b6d7a9; box-shadow: 0 0 6px #b6d7a957; }
 .storage-warning { background: #ddc6a1; color: #514431; font-size: 10px; padding: 6px 15px; text-align: center; }
+.pass-demo-scrim { position: fixed; z-index: 30; inset: 0; display: grid; place-items: center; padding: 18px; background: #0b1c13aa; backdrop-filter: blur(5px); }
+.pass-demo-modal { width: min(390px, 100%); border: 1px solid #cde5d3; border-radius: 18px; padding: 28px; background: #f7f9f1; color: #274832; box-shadow: 0 24px 80px #07181180; }
+.pass-demo-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 15px; background: #d9f4e5; color: #397a58; margin-bottom: 19px; }
+.pass-demo-modal h2 { font: 29px/1.08 Georgia, serif; margin: 10px 0 12px; letter-spacing: -.4px; }
+.pass-demo-modal p { color: #718875; font-size: 12px; line-height: 1.65; margin: 0 0 22px; }
+.pass-demo-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.pass-demo-actions button { border-radius: 8px; padding: 11px 14px; border: 1px solid #cbdccf; background: transparent; color: #46674e; font-size: 11px; }
+.pass-demo-actions button:last-child { display: flex; gap: 8px; align-items: center; background: #315940; border-color: #315940; color: white; }
 
 .drawer-scrim { position: fixed; inset: 0; background: #0b1c1390; z-index: 20; backdrop-filter: blur(2px); }
 .node-drawer { position: fixed; top: 0; bottom: 0; right: 0; z-index: 21; width: 420px; max-width: 100%; overflow-y: auto; overscroll-behavior: contain; background: #f7f9f1; color: #2f4c34; padding: 27px; box-shadow: -10px 0 60px #091b1440; }
@@ -172,6 +183,31 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .rent-list { display: grid; gap: 7px; margin: 12px 0; }
 .rent-list > div { display: flex; gap: 10px; justify-content: space-between; font-size: 9px; color: #8d9b81; }
 .rent-list b { font-weight: 500; color: #668053; }
+.verify-tag { display: inline-flex; align-items: center; padding: 2px 6px; border: 1px solid #d6dfca; border-radius: 20px; background: #f0f3e9; color: #8a967e; font-size: 9px; font-weight: 500; line-height: 1.3; text-transform: lowercase; }
+.area-card, .school-card { border: 1px solid #dbe6d6; border-radius: 13px; padding: 15px; background: #fff; margin: 12px 0; box-shadow: 0 5px 16px #27462e08; }
+.area-card.chosen { border-color: #72ad80; box-shadow: 0 0 0 2px #7fbc8920; }
+.area-card-heading { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+.area-card h4, .school-card h4 { color: #355d42; font-size: 13px; margin: 0 0 6px; }
+.area-card-heading p, .school-card p { color: #8b9982; font-size: 10px; line-height: 1.55; margin: 0; }
+.chosen-tag { display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; border-radius: 20px; background: #e3f4e5; color: #4c865a; padding: 5px 8px; font-size: 9px; }
+.goodfor-tags, .school-filters { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0; }
+.goodfor-tags span { border-radius: 20px; background: #eef3e8; color: #688366; padding: 4px 7px; font-size: 9px; }
+.area-commute { color: #7b9376; font-size: 10px; margin: 10px 0; }
+.nearby-schools { margin: 14px 0; padding-top: 12px; border-top: 1px solid #e5ebdf; }
+.nearby-schools h5 { margin: 0 0 8px; color: #567552; font-size: 10px; }
+.nearby-schools > div { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px solid #edf0e9; color: #60745d; font-size: 10px; }
+.nearby-schools > div > span:last-child { text-align: right; }
+.nearby-schools small { display: block; margin-top: 3px; font-size: 9px; color: #9aa890; }
+.area-actions { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+.area-actions button, .area-actions a, .school-area-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 10px; border-radius: 7px; font-size: 10px; border: 1px solid #c6d9c4; }
+.area-choose, .school-area-link { background: #315940; color: #fff; }
+.area-saved { background: #e7f2e5; color: #57805a; }
+.area-actions a { color: #4e7551; background: #f6f9f2; }
+.school-filters button { border: 1px solid #d5e3d0; background: white; color: #809677; border-radius: 20px; padding: 6px 9px; font-size: 9px; }
+.school-filters button.active { background: #dcefe0; color: #426b4b; border-color: #96c1a0; }
+.school-card { margin: 10px 0; }
+.school-card > div { display: flex; flex-wrap: wrap; gap: 9px; color: #668265; font-size: 10px; margin: 10px 0; }
+.school-card > a { display: inline-flex; align-items: center; gap: 5px; color: #49744c; font-size: 10px; }
 .step-list .drawer-top h2 { font-size: 28px; }
 .step-list-item { display: flex; align-items: center; gap: 12px; background: transparent; border: 0; border-bottom: 1px solid #e0e6d8; padding: 14px 0; width: 100%; text-align: left; color: #536e46; font-size: 12px; }
 .step-list-item > i { width: 7px; height: 7px; border-radius: 50%; }
@@ -208,6 +244,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .map-person strong { font-size: 11px; }
   .map-person > span { font-size: 9px; }
   .map-header-actions { gap: 12px; }
+  .uae-pass-button { padding: 8px 9px; font-size: 9px; }
+  .hub71-badge { padding: 5px 7px; font-size: 8px; }
   .edit-profile { font-size: 9px; }
   .share-button { padding: 8px; }
   .share-button > span { display: none; }
@@ -245,5 +283,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .map-toolbar { padding-left: 14px; padding-right: 14px; }
   .map-person strong { font-size: 10px; }
   .map-person > span { font-size: 8px; }
+  .map-header { gap: 6px; }
+  .map-brand-row { gap: 7px; }
+  .map-header-actions { gap: 5px; }
+  .map-header-actions .edit-profile { display: none; }
+  .uae-pass-button { max-width: 102px; white-space: normal; line-height: 1.2; text-align: center; }
+  .hub71-badge { position: absolute; top: 62px; left: 14px; z-index: 2; }
+  .map-header:has(.hub71-badge) { position: relative; padding-bottom: 38px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }

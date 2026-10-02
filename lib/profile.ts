@@ -1,9 +1,11 @@
 import { iso2Codes, ProfileSchema, type Profile } from "./schema";
 
-export function nextMoveMonth(now = new Date()): string {
-  const month = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
+export function moveMonthIn(monthsAhead: number, now = new Date()): string {
+  const month = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + monthsAhead, 1));
   return month.toISOString().slice(0, 7);
 }
+
+export function nextMoveMonth(now = new Date()): string { return moveMonthIn(1, now); }
 
 export function defaultProfile(moveMonth = nextMoveMonth()): Profile {
   return { nationality: "IN", household: "solo", kids: 0, reason: "job", moveMonth, budgetBand: "mid", hasPets: false, drives: false };
