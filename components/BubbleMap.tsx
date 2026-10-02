@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { criticalPath, downstreamUnlockCounts, getDoByDate, getState, loadCompletedIds, personalise, saveCompletedIds } from "@/lib/engine";
+import { criticalPath, daysBetween, deadlineTone, downstreamUnlockCounts, getDoByDate, getState, loadCompletedIds, moveDateOf, personalise, saveCompletedIds, todayISO, type DeadlineTone } from "@/lib/engine";
 import { categoryStyles, descendants, layoutMap, settlementSteps, type MapNode } from "@/lib/map";
 import { countryName } from "@/lib/profile";
 import { loadChosenArea, saveChosenArea } from "@/lib/areas";
@@ -13,6 +13,19 @@ import NodeDrawer from "./NodeDrawer";
 type View = { x: number; y: number; scale: number };
 type PhaseFilter = Step["phase"] | "all";
 const phases: { value: PhaseFilter; label: string }[] = [{ value: "all", label: "All" }, { value: "before", label: "Before you arrive" }, { value: "landing", label: "Landed" }, { value: "settling", label: "Settling" }, { value: "living", label: "Living" }];
+const badgeColors: Record<DeadlineTone, { fill: string; text: string }> = {
+  upcoming: { fill: "#e5d3b1", text: "#3b3529" },
+  soon: { fill: "#f1b955", text: "#3d2c0b" },
+  overdue: { fill: "#e7786b", text: "#3a110c" },
+};
+const formatDate = (date: string) =>
+  new Date(`${date}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+function countdown(days: number) {
+  if (days > 1) return `${days} days to go`;
+  if (days === 1) return "1 day to go";
+  if (days === 0) return "Moving today";
+  return `${-days} ${days === -1 ? "day" : "days"} ago`;
+}
 const clampScale = (value: number) => Math.min(2.8, Math.max(0.06, value));
 function fittedView(nodes: readonly MapNode[], viewport: { width: number; height: number }): View {
   if (!nodes.length) return { x: viewport.width / 2, y: viewport.height / 2, scale: 1 };
@@ -44,6 +57,8 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   const [chosenArea, setChosenArea] = useState<string | null>(null);
   const [showPassDemo, setShowPassDemo] = useState(false);
   const [demoRunning, setDemoRunning] = useState(false);
+  // Set after mount so the countdown and badges use the viewer's own date.
+  const [today, setToday] = useState<string | null>(null);
   const stage = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);
   const viewRef = useRef(view);
@@ -70,8 +85,10 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   const hoverUnlocks = [...downstream].filter((id) => !completed.has(id)).map((id) => roadmap.find((step) => step.id === id)?.shortTitle);
   const closeDrawer = useCallback(() => setSelected(null), []);
   const categories = [...new Set(roadmap.map((step) => step.category))];
+  const moveDate = moveDateOf(profile);
+  const daysToMove = today ? daysBetween(today, moveDate) : null;
 
-  useEffect(() => { setCompleted(loadCompletedIds()); setChosenArea(loadChosenArea()); setLoaded(true); }, []);
+  useEffect(() => { setCompleted(loadCompletedIds()); setChosenArea(loadChosenArea()); setToday(todayISO()); setLoaded(true); }, []);
   useEffect(() => {
     if (!stage.current) return;
     const observer = new ResizeObserver(([entry]) => {
@@ -229,7 +246,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   }
   function isDimmed(id: string) { return (hovered && id !== hovered && !downstream.has(id)) || (showCritical && !criticalIds.has(id)); }
   return <main className="map-page">
-    <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>Your Abu Dhabi roadmap</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions"><button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button><Link href="/" className="edit-profile">Edit profile</Link><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></div></header>
+    <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>Your Abu Dhabi roadmap</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}</span><span className="move-countdown">Moving {formatDate(moveDate)}{daysToMove !== null && ` · ${countdown(daysToMove)}`}</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions"><button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button><Link href="/" className="edit-profile">Edit profile</Link><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></div></header>
     <div className="map-toolbar"><div className="phase-filters" aria-label="Filter by phase">{phases.map((item) => <button key={item.value} className={phase === item.value ? "active" : ""} aria-pressed={phase === item.value} onClick={() => { setPhase(item.value); setHovered(null); }}>{item.label}</button>)}</div><div className="toolbar-right"><button className={`critical-toggle ${showCritical ? "active" : ""}`} aria-pressed={showCritical} onClick={() => setShowCritical(!showCritical)}><Icon name="spark" size={14} />Critical path</button><div className="settlement-progress"><div><span>{completed.has("settled") ? "Settled" : "To settled"}</span><b>{progress}%</b></div><div className="progress-track" role="progressbar" aria-label="Progress to settled" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><motion.div animate={{ width: `${progress}%` }} transition={{ duration: reducedMotion ? 0 : 0.6 }} /></div></div></div></div>
     <div className="map-stage" ref={stage}>
       <div className="map-caption"><span className="eyebrow">YOUR MOVE, CONNECTED</span><h1>{phase === "all" ? "One step opens the next." : phases.find((item) => item.value === phase)?.label}</h1><p>{showCritical ? "Your longest remaining route to settled." : "Tap a bubble to see what comes next."}</p></div>
@@ -251,7 +268,8 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
             const state = getState(node.step, completed); const color = categoryStyles[node.step.category].color;
             const words = node.step.shortTitle.split(" ");
             const lines = words.length === 3 ? [words[0], `${words[1]} ${words[2]}`] : words.length === 2 ? words : words;
-            const deadline = getDoByDate(node.step, profile.moveMonth);
+            const deadline = getDoByDate(node.step, moveDate);
+            const tone = deadline && today && state !== "done" ? deadlineTone(deadline, today) : "upcoming";
             const flash = newlyUnlocked.has(node.id);
             return <motion.g key={node.id} initial={{ opacity: 0 }} animate={{ opacity: isDimmed(node.id) ? 0.17 : 1 }} transition={{ duration: reducedMotion ? 0 : 0.35 }}>
               <g transform={`translate(${node.x} ${node.y})`} role="button" tabIndex={selected ? -1 : 0} aria-label={`${node.step.shortTitle}, ${state}, unlocks ${counts[node.id]} steps`} className="bubble-node" data-step-id={node.id} onMouseEnter={() => setHovered(node.id)} onMouseLeave={() => setHovered(null)} onFocus={() => setHovered(node.id)} onBlur={() => setHovered(null)} onClick={() => selectNode(node.id)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); suppressClick.current = false; selectNode(node.id); } }}>
@@ -264,7 +282,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
                 {state === "done" && <g transform={`translate(${node.radius * 0.69} ${-node.radius * 0.69})`} pointerEvents="none"><circle r="12" fill="#193328" stroke={color} strokeWidth="1.5" /><g transform="translate(-7 -7)" style={{ color }}><Icon name="check" size={14} /></g></g>}
                 <text textAnchor="middle" fill={node.id === "emirates_id" || state === "done" ? "#18362b" : state === "locked" ? "#a0b3a9" : color} fontSize={node.id === "emirates_id" ? 23 : node.radius > 53 ? 15 : 13} fontWeight={node.id === "emirates_id" ? 600 : 500} pointerEvents="none">{lines.map((line, index) => <tspan key={index} x="0" y={(index - (lines.length - 1) / 2) * (node.id === "emirates_id" ? 28 : 18) + 5}>{line}</tspan>)}</text>
                 {node.id === "emirates_id" && <text textAnchor="middle" y="51" fontSize="10" letterSpacing="1.2" fill="#315949">YOUR CENTRAL HUB</text>}
-                {deadline && <g transform={`translate(-49 ${node.radius - 5})`} pointerEvents="none"><rect width="98" height="22" rx="11" fill="#e5d3b1" /><text x="49" y="14.5" textAnchor="middle" fontSize="9.5" fill="#3b3529">do by {new Date(`${deadline}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })}</text></g>}
+                {deadline && <g transform={`translate(-49 ${node.radius - 5})`} pointerEvents="none"><rect width="98" height="22" rx="11" fill={badgeColors[tone].fill} /><text x="49" y="14.5" textAnchor="middle" fontSize="9.5" fontWeight={tone === "upcoming" ? 400 : 600} fill={badgeColors[tone].text}>{tone === "overdue" ? "Overdue" : `do by ${new Date(`${deadline}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })}`}</text></g>}
               </g>
             </motion.g>;
           })}
@@ -278,7 +296,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
     <footer className="map-legend"><div className="category-legend">{categories.map((category) => <span key={category}><i style={{ background: categoryStyles[category].color }} />{categoryStyles[category].label}</span>)}</div><div className="state-legend"><span><i className="legend-done" />Done</span><span><i className="legend-ready" />Available</span><span><Icon name="lock" size={11} />Locked</span></div></footer>
     {storageWarning && <div className="storage-warning" role="status">Progress is kept for this visit. Browser storage is unavailable.</div>}
     {!loaded && <span className="sr-only">Loading saved progress</span>}
-    <AnimatePresence>{selectedStep && <NodeDrawer key="step-drawer" step={selectedStep} roadmap={roadmap} profile={profile} completed={completed} chosenArea={chosenArea} onChooseArea={chooseArea} onClose={closeDrawer} onDone={markDone} onSelect={setSelected} />}</AnimatePresence>
+    <AnimatePresence>{selectedStep && <NodeDrawer key="step-drawer" step={selectedStep} roadmap={roadmap} profile={profile} today={today} completed={completed} chosenArea={chosenArea} onChooseArea={chooseArea} onClose={closeDrawer} onDone={markDone} onSelect={setSelected} />}</AnimatePresence>
     <AnimatePresence>{showPassDemo && <motion.div className="pass-demo-scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowPassDemo(false)}><motion.div className="pass-demo-modal" role="dialog" aria-modal="true" aria-labelledby="pass-demo-title" initial={{ y: 20, scale: .97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: .97 }} onClick={(event) => event.stopPropagation()} onKeyDown={(event) => { if (event.key === "Escape") setShowPassDemo(false); }}><div className="pass-demo-icon"><Icon name="check" size={25} /></div><span className="eyebrow">IDENTITY DEMO</span><h2 id="pass-demo-title">Demo — production uses UAE Pass OAuth</h2><p>This preview marks your arrival and identity steps complete, then lights up what they unlock. No credentials are requested.</p><div className="pass-demo-actions"><button onClick={() => setShowPassDemo(false)}>Cancel</button><button autoFocus onClick={completePassDemo}>Continue demo <Icon name="chevron" size={14} /></button></div></motion.div></motion.div>}</AnimatePresence>
     <AnimatePresence>{listOpen && <><motion.div className="drawer-scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setListOpen(false)} /><motion.aside className="node-drawer step-list" initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}><div className="drawer-top"><h2>Your steps</h2><button className="icon-button" aria-label="Close step list" onClick={() => setListOpen(false)}><Icon name="close" /></button></div>{visible.map((node) => <button className="step-list-item" key={node.id} onClick={() => { setListOpen(false); setSelected(node.id); }}><i style={{ background: categoryStyles[node.step.category].color }} /><span>{node.step.shortTitle}<small>{getState(node.step, completed)}</small></span><Icon name="chevron" size={15} /></button>)}</motion.aside></>}</AnimatePresence>
   </main>;

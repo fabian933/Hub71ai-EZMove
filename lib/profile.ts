@@ -1,18 +1,34 @@
 import { iso2Codes, ProfileSchema, type Profile } from "./schema";
 
-export function moveMonthIn(monthsAhead: number, now = new Date()): string {
-  const month = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + monthsAhead, 1));
-  return month.toISOString().slice(0, 7);
+/** YYYY-MM-DD for the same day of the month, clamped to the month's last day. */
+export function moveDateIn(monthsAhead: number, now = new Date()): string {
+  const year = now.getUTCFullYear(); const month = now.getUTCMonth() + monthsAhead;
+  const lastDay = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+  return new Date(Date.UTC(year, month, Math.min(now.getUTCDate(), lastDay))).toISOString().slice(0, 10);
 }
 
-export function nextMoveMonth(now = new Date()): string { return moveMonthIn(1, now); }
+export function nextMoveDate(now = new Date()): string { return moveDateIn(1, now); }
 
-export function defaultProfile(moveMonth = nextMoveMonth()): Profile {
-  return { nationality: "IN", household: "solo", kids: 0, reason: "job", moveMonth, budgetBand: "mid", hasPets: false, drives: false };
+export function budgetBandFor(budgetAED: number): Profile["budgetBand"] {
+  return budgetAED < 90_000 ? "low" : budgetAED <= 150_000 ? "mid" : "high";
+}
+
+/** Keeps the derived fields (moveMonth, budgetBand) in step with moveDate and budgetAED. */
+export function normaliseProfile(profile: Profile): Profile {
+  const { budgetAED, moveDate, ...rest } = profile;
+  return {
+    ...rest,
+    ...(moveDate ? { moveDate, moveMonth: moveDate.slice(0, 7) } : {}),
+    ...(budgetAED ? { budgetAED, budgetBand: budgetBandFor(budgetAED) } : {}),
+  };
+}
+
+export function defaultProfile(moveDate = nextMoveDate()): Profile {
+  return { nationality: "IN", household: "solo", kids: 0, reason: "job", moveDate, moveMonth: moveDate.slice(0, 7), budgetBand: "mid", hasPets: false, drives: false };
 }
 
 export function encodeProfile(profile: Profile): string {
-  return btoa(JSON.stringify(ProfileSchema.parse(profile))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return btoa(JSON.stringify(normaliseProfile(ProfileSchema.parse(profile)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
 export function decodeProfile(value: string | undefined): Profile | null {
@@ -20,7 +36,7 @@ export function decodeProfile(value: string | undefined): Profile | null {
   try {
     const padded = value.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(value.length / 4) * 4, "=");
     const parsed = ProfileSchema.safeParse(JSON.parse(atob(padded)));
-    return parsed.success ? parsed.data : null;
+    return parsed.success ? normaliseProfile(parsed.data) : null;
   } catch { return null; }
 }
 
@@ -28,3 +44,4 @@ const names = new Intl.DisplayNames(["en"], { type: "region" });
 export const nationalities = [...iso2Codes].map((code) => ({ code, name: names.of(code) ?? code }))
   .sort((a, b) => a.name.localeCompare(b.name));
 export const countryName = (code: string) => names.of(code) ?? code;
+export const featuredNationalities = ["GB", "US", "FR", "CN", "IN"] as const;

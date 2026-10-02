@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { steps } from "./data";
 import { ProfileSchema, type Profile, type Step } from "./schema";
 
@@ -7,10 +8,11 @@ const completedSet = (ids: CompletedIds) => new Set(ids);
 
 export function personalise(profile: Profile): Step[] {
   const parsed = ProfileSchema.parse(profile);
+  const reason = parsed.reason === "other" ? "job" : parsed.reason;
   const selected = steps.filter(({ appliesIf: rule }) =>
     (!rule.household || rule.household.includes(parsed.household)) &&
     (rule.minKids === undefined || parsed.kids >= rule.minKids) &&
-    (!rule.reasons || rule.reasons.includes(parsed.reason)) &&
+    (!rule.reasons || rule.reasons.includes(reason)) &&
     (rule.hasPets === undefined || parsed.hasPets === rule.hasPets) &&
     (rule.drives === undefined || parsed.drives === rule.drives),
   );
@@ -78,18 +80,38 @@ export function criticalPath(roadmap: readonly Step[], completed: CompletedIds =
   return longest(targetId);
 }
 
-/** YYYY-MM-DD in UTC; a month-only move date means the first day of that month. */
-export function getDoByDate(step: Step, moveMonth: string): string | null {
+/** YYYY-MM-DD. Older profiles without a move date fall back to the first day of the move month. */
+export function moveDateOf(profile: Pick<Profile, "moveDate" | "moveMonth">): string {
+  return profile.moveDate ?? `${ProfileSchema.shape.moveMonth.parse(profile.moveMonth)}-01`;
+}
+
+/** Today's date in the viewer's local time zone, as YYYY-MM-DD. */
+export function todayISO(now = new Date()): string {
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+}
+
+/** Whole days from one YYYY-MM-DD date to another. */
+export function daysBetween(from: string, to: string): number {
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
+}
+
+/** Move date minus the step's lead time, as YYYY-MM-DD in UTC. */
+export function getDoByDate(step: Step, moveDate: string): string | null {
   if (!step.mustDoBeforeFlying) return null;
-  const month = ProfileSchema.shape.moveMonth.parse(moveMonth);
-  const date = new Date(`${month}-01T00:00:00.000Z`);
+  const date = new Date(`${z.iso.date().parse(moveDate)}T00:00:00.000Z`);
   date.setUTCDate(date.getUTCDate() - (step.leadTimeDays ?? 30));
   return date.toISOString().slice(0, 10);
 }
 
+export type DeadlineTone = "upcoming" | "soon" | "overdue";
+export function deadlineTone(doBy: string, today: string): DeadlineTone {
+  const days = daysBetween(today, doBy);
+  return days < 0 ? "overdue" : days <= 14 ? "soon" : "upcoming";
+}
+
 export function doByDates(profile: Profile, roadmap: readonly Step[] = personalise(profile)): Record<string, string> {
   return Object.fromEntries(roadmap.filter((step) => step.mustDoBeforeFlying)
-    .map((step) => [step.id, getDoByDate(step, profile.moveMonth)!]));
+    .map((step) => [step.id, getDoByDate(step, moveDateOf(profile))!]));
 }
 
 export const COMPLETED_STORAGE_KEY = "ezmove.completed.v1";

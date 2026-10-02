@@ -14,7 +14,10 @@ export default function AreaSelection({ profile, chosenArea, onChooseArea }: {
   const units = homeTypes(profile);
   return <section className="drawer-section community-section">
     <h3>Choose your area</h3>
-    <p className="tiny-note">{profile.budgetBand[0].toUpperCase() + profile.budgetBand.slice(1)} budget · grouped by relative starting rents from the supplied data. Sorted by commute, or rent where commute is unknown. Verify current listings.</p>
+    {profile.budgetAED
+      ? <p className="budget-fit"><b>{choices.length} {choices.length === 1 ? "area fits" : "areas fit"} your budget</b> · AED {number(profile.budgetAED)}/yr</p>
+      : null}
+    <p className="tiny-note">{profile.budgetAED ? "Starting rents at or under your budget, from the supplied data." : `${profile.budgetBand[0].toUpperCase() + profile.budgetBand.slice(1)} budget · grouped by relative starting rents from the supplied data.`} Sorted by commute, or rent where commute is unknown. Verify current listings.</p>
     {choices.length ? choices.map((community) => {
       const nearby = profile.household === "family" ? schools.filter((school) => school.communityId === community.id) : [];
       return <article className={`area-card ${chosenArea === community.id ? "chosen" : ""}`} key={community.id}>
@@ -25,6 +28,6 @@ export default function AreaSelection({ profile, chosenArea, onChooseArea }: {
         {profile.household === "family" && <div className="nearby-schools"><h5>Nearby schools</h5>{nearby.length ? nearby.map((school) => <div key={school.id}><span>{school.name}<small>{school.curriculum}</small></span><span>ADEK: {school.adekRating ?? verify}<small>{school.feeAED ? `Fees from AED ${number(school.feeAED.min)}/yr` : verify}</small></span></div>) : <p>No school data for this area yet. {verify}</p>}</div>}
         <div className="area-actions"><button type="button" onClick={() => onChooseArea(community.id)} className={chosenArea === community.id ? "area-saved" : "area-choose"}>{chosenArea === community.id ? "Area saved" : "Choose this area"}</button>{community.listingLink ? <a href={community.listingLink} target="_blank" rel="noopener noreferrer" className="area-listings">View listings <Icon name="link" size={13} /></a> : verify}</div>
       </article>;
-    }) : <p>No matching rent data for this budget band. {verify}</p>}
+    }) : <p>{profile.budgetAED ? "No area in the supplied data starts at or under this budget." : "No matching rent data for this budget band."} {verify}</p>}
   </section>;
 }

@@ -6,7 +6,7 @@ export const iso2Codes = new Set(
 const text = z.string().trim().min(1);
 const id = text.regex(/^[a-z][a-z0-9_-]*$/);
 const household = z.enum(["solo", "couple", "family"]);
-const reason = z.enum(["job", "hub71_founder", "own_business"]);
+const reason = z.enum(["job", "hub71_founder", "own_business", "other"]);
 const range = z.object({ min: z.number().finite().nonnegative(), max: z.number().finite().nonnegative() })
   .strict().refine(({ min, max }) => max >= min, "max must be at least min");
 const link = z.url().refine((value) => /^https?:\/\//.test(value), "Use an HTTP(S) URL").nullable();
@@ -21,7 +21,11 @@ export const ProfileSchema = z.object({
   kids: z.number().int().nonnegative(),
   reason,
   moveMonth: z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Use YYYY-MM"),
+  /** Exact move date. moveMonth is derived from it; older shared links only have moveMonth. */
+  moveDate: z.iso.date().optional(),
   budgetBand: z.enum(["low", "mid", "high"]),
+  /** Annual rent budget. budgetBand is derived from it when set. */
+  budgetAED: z.number().int().positive().max(100_000_000).optional(),
   hasPets: z.boolean(),
   drives: z.boolean(),
 }).strict();

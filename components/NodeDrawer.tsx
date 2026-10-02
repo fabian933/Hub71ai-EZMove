@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { getDoByDate, getState } from "@/lib/engine";
+import { daysBetween, deadlineTone, getDoByDate, getState, moveDateOf } from "@/lib/engine";
 import { categoryStyles, descendants } from "@/lib/map";
 import type { Profile, Step } from "@/lib/schema";
 import Icon from "./Icon";
@@ -9,8 +9,8 @@ import AreaSelection from "./AreaSelection";
 import SchoolSelection from "./SchoolSelection";
 
 const number = (value: number) => value.toLocaleString("en-AE");
-export default function NodeDrawer({ step, roadmap, profile, completed, chosenArea, onChooseArea, onClose, onDone, onSelect }: {
-  step: Step; roadmap: Step[]; profile: Profile; completed: Set<string>; chosenArea: string | null;
+export default function NodeDrawer({ step, roadmap, profile, today, completed, chosenArea, onChooseArea, onClose, onDone, onSelect }: {
+  step: Step; roadmap: Step[]; profile: Profile; today: string | null; completed: Set<string>; chosenArea: string | null;
   onChooseArea: (id: string) => void; onClose: () => void; onDone: (id: string) => void; onSelect: (id: string) => void;
 }) {
   const reduced = useReducedMotion();
@@ -19,7 +19,9 @@ export default function NodeDrawer({ step, roadmap, profile, completed, chosenAr
   const state = getState(step, completed);
   const byId = new Map(roadmap.map((item) => [item.id, item]));
   const downstream = descendants(step.id, roadmap);
-  const deadline = getDoByDate(step, profile.moveMonth);
+  const deadline = getDoByDate(step, moveDateOf(profile));
+  const tone = deadline && today && state !== "done" ? deadlineTone(deadline, today) : "upcoming";
+  const daysLeft = deadline && today ? daysBetween(today, deadline) : null;
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
     closeRef.current?.focus();
@@ -42,7 +44,7 @@ export default function NodeDrawer({ step, roadmap, profile, completed, chosenAr
       <div className="drawer-top"><span className="drawer-category"><i style={{ background: categoryStyles[step.category].color }} />{categoryStyles[step.category].label}</span><button ref={closeRef} className="icon-button" aria-label="Close step details" onClick={onClose}><Icon name="close" /></button></div>
       <div className={`drawer-state ${state}`}>{state === "done" ? <Icon name="check" size={14} /> : state === "locked" ? <Icon name="lock" size={14} /> : <span className="status-dot" />}{state === "done" ? "Completed" : state === "available" ? "Ready when you are" : "A few steps come first"}</div>
       <h2 id="drawer-title">{step.title}</h2><p className="drawer-provider">{step.provider}</p>
-      {deadline && <div className="deadline-panel"><span>DO BY</span><strong>{new Date(`${deadline}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}</strong><p>Planning reminder based on the first day of your move month. Verify the required lead time.</p></div>}
+      {deadline && <div className={`deadline-panel ${tone}`}><span>{tone === "overdue" ? "OVERDUE" : "DO BY"}</span><strong>{new Date(`${deadline}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}{state !== "done" && daysLeft !== null && <small>{daysLeft < 0 ? ` · ${-daysLeft} ${daysLeft === -1 ? "day" : "days"} late` : daysLeft === 0 ? " · today" : ` · ${daysLeft} ${daysLeft === 1 ? "day" : "days"} left`}</small>}</strong><p>{step.leadTimeDays ?? 30} days before your move date. Verify the required lead time.</p></div>}
       <section className="drawer-section"><h3>Needs</h3>{step.prerequisites.length ? <div className="dependency-list">{step.prerequisites.map((id) => <button key={id} onClick={() => onSelect(id)}><span className={`dependency-status ${completed.has(id) ? "complete" : ""}`}><Icon name={completed.has(id) ? "check" : "lock"} size={13} /></span><span>{byId.get(id)?.shortTitle}</span><Icon name="chevron" size={14} /></button>)}</div> : <p>No earlier steps. You can start here.</p>}</section>
       <section className="drawer-section"><h3>Unlocks <span>{downstream.size}</span></h3>{downstream.size ? <div className="unlock-tags">{[...downstream].map((id) => <button key={id} onClick={() => onSelect(id)}>{byId.get(id)?.shortTitle}</button>)}</div> : <p>{step.id === "settled" ? "Welcome to your next chapter." : "One more part of your move, taken care of."}</p>}{downstream.size > 0 && <p className="tiny-note">Downstream steps may also need other prerequisites.</p>}</section>
       <section className="drawer-section"><h3>Documents</h3>{step.documents.length ? <ul>{step.documents.map((document) => <li key={document}>{document}</li>)}</ul> : <p>Verify required documents with the provider.</p>}</section>

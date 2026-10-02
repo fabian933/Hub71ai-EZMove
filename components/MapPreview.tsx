@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { defaultProfile, encodeProfile } from "@/lib/profile";
-export default function MapPreview({ moveMonth }: { moveMonth: string }) {
+export default function MapPreview({ moveDate }: { moveDate: string }) {
   const nodes = [
     { x: 260, y: 222, r: 70, name: ['Emirates', 'ID'], color: '#b7f3da' },
     { x: 108, y: 119, r: 44, name: ['Medical', 'fitness'], color: '#edd8ba' },
@@ -10,8 +10,8 @@ export default function MapPreview({ moveMonth }: { moveMonth: string }) {
     { x: 95, y: 289, r: 38, name: ['Mobile', 'plan'], color: '#d3dfd5' },
     { x: 335, y: 62, r: 30, name: ['Arrive'], color: '#f1c7ba' },
   ];
-  return <Link href={`/map?p=${encodeProfile(defaultProfile(moveMonth))}`} className="preview-link" aria-label="Explore a sample relocation map">
-    <div className="preview-top"><span className="status-dot" /> A little clarity goes a long way <span className="preview-tag">ABU DHABI</span></div>
+  return <Link href={`/map?p=${encodeProfile(defaultProfile(moveDate))}`} className="preview-link" aria-label="Explore a sample relocation map">
+    <div className="preview-top"><span className="preview-tag">ABU DHABI</span></div>
     <svg viewBox="0 0 520 475" className="preview-svg" aria-hidden="true">
       <defs><radialGradient id="previewHalo"><stop stopColor="#b7f3da" stopOpacity=".15" /><stop offset="1" stopColor="#b7f3da" stopOpacity="0" /></radialGradient></defs>
       <circle cx="260" cy="222" r="190" fill="url(#previewHalo)" /><circle cx="260" cy="222" r="154" className="preview-orbit" /><circle cx="260" cy="222" r="221" className="preview-orbit" />
