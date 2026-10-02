@@ -1,17 +1,11 @@
-import Link from "next/link";
-
+import Intake from "@/components/Intake";
+import MapPreview from "@/components/MapPreview";
+import { nextMoveMonth } from "@/lib/profile";
+export const dynamic = "force-dynamic";
 export default function HomePage() {
-  return (
-    <section className="max-w-2xl">
-      <p className="mb-4 text-sm font-medium text-teal-800">Moving to Abu Dhabi</p>
-      <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">Know your next step.</h1>
-      <p className="mt-6 text-lg leading-relaxed text-slate-600">
-        A roadmap for your move, from preparing documents to settling in.
-      </p>
-      <p className="mt-5 text-sm text-slate-500">Your personalised intake is coming soon.</p>
-      <Link href="/map" className="mt-8 inline-block rounded-full bg-teal-900 px-6 py-3 font-medium text-white">
-        View roadmap preview
-      </Link>
-    </section>
-  );
+  const moveMonth = nextMoveMonth();
+  return <main className="home-page"><header className="home-nav"><a href="/" className="brand"><span className="brand-mark">e.</span>ez move<span className="brand-location">ABU DHABI</span></a><span className="nav-note">A new city. A clear plan.</span></header>
+    <div className="home-grid"><section className="home-intro"><div className="eyebrow"><span /> YOUR NEXT CHAPTER STARTS HERE</div><h1>Your move.<br /><em>Made clear.</em></h1><p className="home-description">From the first document to the day you feel settled. A personalised roadmap for your life in Abu Dhabi.</p><div className="intro-benefits"><span>Know the order</span><span>Unlock your next step</span><span>Feel at home</span></div><MapPreview moveMonth={moveMonth} /></section><Intake moveMonth={moveMonth} /></div>
+    <footer className="home-footer"><span>Built for people, families &amp; Hub71 founders.</span><span>Small steps. Big beginnings.</span></footer>
+  </main>;
 }

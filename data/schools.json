@@ -1,1 +1,262 @@
-[]
+[
+  {
+    "id": "cranleigh-abu-dhabi",
+    "name": "Cranleigh Abu Dhabi",
+    "curriculum": "British",
+    "adekRating": "Outstanding",
+    "communityId": "saadiyat",
+    "feeAED": {
+      "min": 71500,
+      "max": 105980
+    },
+    "website": "https://www.cranleigh.ae/",
+    "sourceUrl": "https://www.mpinv.ae/guide/family-homes-near-schools-abu-dhabi"
+  },
+  {
+    "id": "american-community-school-of-abu-dhabi",
+    "name": "American Community School of Abu Dhabi",
+    "curriculum": "American/IB",
+    "adekRating": "Outstanding",
+    "communityId": "saadiyat",
+    "feeAED": {
+      "min": 60765,
+      "max": 101537
+    },
+    "website": "https://www.acs.sch.ae/",
+    "sourceUrl": "https://www.acs.sch.ae/join-us/admissions/tuition-fees"
+  },
+  {
+    "id": "muna-british-academy",
+    "name": "Muna British Academy",
+    "curriculum": "British",
+    "adekRating": "Outstanding",
+    "communityId": "saadiyat",
+    "feeAED": {
+      "min": 52973,
+      "max": 69208
+    },
+    "website": "https://www.munabritishacademy.ae/",
+    "sourceUrl": "https://www.munabritishacademy.ae/academy-fees/"
+  },
+  {
+    "id": "lycee-francais-international-theodore-monod",
+    "name": "Lycée Français International Théodore Monod",
+    "curriculum": "French",
+    "adekRating": "Very Good",
+    "communityId": "saadiyat",
+    "feeAED": {
+      "min": 33490,
+      "max": 55466
+    },
+    "website": "https://lfitm.org/",
+    "sourceUrl": "https://talem.ae/institution/lycee-francais-theodore-monod"
+  },
+  {
+    "id": "yas-american-academy",
+    "name": "Yas American Academy",
+    "curriculum": "American",
+    "adekRating": "Good",
+    "communityId": "yas",
+    "feeAED": {
+      "min": 57090,
+      "max": 68850
+    },
+    "website": "https://www.yasamericanacademy.ae/",
+    "sourceUrl": "https://www.yasamericanacademy.ae/academy-fees/"
+  },
+  {
+    "id": "sabis-international-school-yas-island",
+    "name": "SABIS International School - Yas Island",
+    "curriculum": "SABIS",
+    "adekRating": "Good",
+    "communityId": "yas",
+    "feeAED": {
+      "min": 40540,
+      "max": 63840
+    },
+    "website": "https://sisyasisland.sabis.net/",
+    "sourceUrl": "https://www.mpinv.ae/guide/family-homes-near-schools-abu-dhabi"
+  },
+  {
+    "id": "noya-british-school",
+    "name": "Noya British School",
+    "curriculum": "British",
+    "adekRating": null,
+    "communityId": "yas",
+    "feeAED": {
+      "min": 32000,
+      "max": 47000
+    },
+    "website": "https://www.noya.sch.ae/",
+    "sourceUrl": "https://www.noya.sch.ae/en/admission"
+  },
+  {
+    "id": "repton-abu-dhabi",
+    "name": "Repton Abu Dhabi",
+    "curriculum": "British",
+    "adekRating": "Outstanding",
+    "communityId": "al-reem-island",
+    "feeAED": {
+      "min": 63740,
+      "max": 83390
+    },
+    "website": "https://www.reptonabudhabi.org/",
+    "sourceUrl": "https://www.reptonabudhabi.org/fees/"
+  },
+  {
+    "id": "gems-world-academy-abu-dhabi",
+    "name": "GEMS World Academy Abu Dhabi",
+    "curriculum": "British/IB",
+    "adekRating": "Very Good",
+    "communityId": "al-reem-island",
+    "feeAED": {
+      "min": 55420,
+      "max": 73890
+    },
+    "website": "https://www.gemsworldacademy-abudhabi.com/en/",
+    "sourceUrl": "https://www.gemsworldacademy-abudhabi.com/en/tuition-fees"
+  },
+  {
+    "id": "nord-anglia-international-school-abu-dhabi",
+    "name": "Nord Anglia International School Abu Dhabi",
+    "curriculum": "British",
+    "adekRating": null,
+    "communityId": "al-reem-island",
+    "feeAED": {
+      "min": 65000,
+      "max": 95000
+    },
+    "website": "https://www.nordangliaeducation.com/nas-abu-dhabi",
+    "sourceUrl": "https://www.schoolsery.com/schools/nord-anglia-international-school-al-reem-island"
+  },
+  {
+    "id": "gems-american-academy-abu-dhabi",
+    "name": "GEMS American Academy Abu Dhabi",
+    "curriculum": "American/IB",
+    "adekRating": "Very Good",
+    "communityId": "khalifa-city",
+    "feeAED": {
+      "min": 57850,
+      "max": 80610
+    },
+    "website": "https://www.gemsaa-abudhabi.com/en",
+    "sourceUrl": "https://www.gemsaa-abudhabi.com/en/Admissions/Tuition-Fees"
+  },
+  {
+    "id": "yasmina-british-academy",
+    "name": "Yasmina British Academy",
+    "curriculum": "British",
+    "adekRating": "Outstanding",
+    "communityId": "khalifa-city",
+    "feeAED": {
+      "min": 49740,
+      "max": 67270
+    },
+    "website": "https://www.yasminabritishacademy.ae/",
+    "sourceUrl": "https://www.yasminabritishacademy.ae/admission/"
+  },
+  {
+    "id": "canadian-international-school-abu-dhabi",
+    "name": "Canadian International School Abu Dhabi",
+    "curriculum": "Canadian",
+    "adekRating": "Outstanding",
+    "communityId": "khalifa-city",
+    "feeAED": {
+      "min": 39010,
+      "max": 51820
+    },
+    "website": "https://cisabudhabi.com/",
+    "sourceUrl": "https://talem.ae/institution/canadian-international-school-abu-dhabi"
+  },
+  {
+    "id": "raha-international-school-gardens-campus",
+    "name": "Raha International School - Gardens Campus",
+    "curriculum": "IB",
+    "adekRating": "Very Good",
+    "communityId": "al-raha-beach",
+    "feeAED": {
+      "min": 41960,
+      "max": 66030
+    },
+    "website": "https://risgc.ae/",
+    "sourceUrl": "https://www.international-schools-database.com/in/abu-dhabi/raha-international-school-gardens-campus-abu-dhabi/fees"
+  },
+  {
+    "id": "gems-founders-school-masdar-city",
+    "name": "GEMS Founders School - Masdar City",
+    "curriculum": "British",
+    "adekRating": null,
+    "communityId": "masdar-city",
+    "feeAED": {
+      "min": 26000,
+      "max": 36000
+    },
+    "website": "https://www.gemsfoundersschool-masdarcity.com/en",
+    "sourceUrl": "https://www.international-schools-database.com/in/abu-dhabi/gems-founders-school-masdar-city-abu-dhabi/fees"
+  },
+  {
+    "id": "al-yasat-private-school",
+    "name": "Al Yasat Private School",
+    "curriculum": "American",
+    "adekRating": "Good",
+    "communityId": "al-reef",
+    "feeAED": {
+      "min": 34200,
+      "max": 52440
+    },
+    "website": "https://www.alyasat-school.com/en/",
+    "sourceUrl": "https://www.mpinv.ae/guide/family-homes-near-schools-abu-dhabi"
+  },
+  {
+    "id": "aspen-heights-british-school",
+    "name": "Aspen Heights British School",
+    "curriculum": "British/IB",
+    "adekRating": "Good",
+    "communityId": "al-reef",
+    "feeAED": {
+      "min": 38080,
+      "max": 65290
+    },
+    "website": "https://www.ahbs.ae/",
+    "sourceUrl": "https://talem.ae/institution/aspen-heights-british-school"
+  },
+  {
+    "id": "merryland-international-school",
+    "name": "Merryland International School",
+    "curriculum": "British",
+    "adekRating": "Outstanding",
+    "communityId": "mbz-city",
+    "feeAED": {
+      "min": 26200,
+      "max": 46620
+    },
+    "website": "https://www.merrylandinternational.net/",
+    "sourceUrl": "https://www.merrylandinternational.net/newsite/schoolfee/"
+  },
+  {
+    "id": "bateen-world-academy",
+    "name": "Bateen World Academy",
+    "curriculum": "British/IB",
+    "adekRating": "Outstanding",
+    "communityId": "corniche-al-bateen",
+    "feeAED": {
+      "min": 54000,
+      "max": 75310
+    },
+    "website": "https://www.bateenworldacademy.ae/",
+    "sourceUrl": "https://www.bateenworldacademy.ae/academy-fees/"
+  },
+  {
+    "id": "ics-al-danah",
+    "name": "International Community School - Al Danah",
+    "curriculum": "British",
+    "adekRating": "Good",
+    "communityId": "al-maryah-island",
+    "feeAED": {
+      "min": 28101,
+      "max": 57945
+    },
+    "website": "https://aldanah.icschools.ae/",
+    "sourceUrl": "https://edcare.ae/schools/international-community-schools-Al-Danah"
+  }
+]

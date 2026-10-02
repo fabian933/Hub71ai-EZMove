@@ -1,1 +1,283 @@
-[]
+[
+  {
+    "id": "al-reem-island",
+    "name": "Al Reem Island",
+    "summary": "Modern waterfront high-rises with malls, parks and quick access to central Abu Dhabi.",
+    "goodFor": [
+      "singles"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 69900,
+        "max": 155000
+      },
+      "2br": {
+        "min": 92000,
+        "max": 375000
+      },
+      "3br": {
+        "min": 120000,
+        "max": 750000
+      },
+      "villa": {
+        "min": 280000,
+        "max": 450000
+      }
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/al-reem-island/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-al-reem-island.html"
+  },
+  {
+    "id": "saadiyat",
+    "name": "Saadiyat",
+    "summary": "Luxury cultural island with beaches, low-rise residences, family amenities and premium villas.",
+    "goodFor": [
+      "beach"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 80000,
+        "max": 350000
+      },
+      "2br": {
+        "min": 115000,
+        "max": 525000
+      },
+      "3br": {
+        "min": 195000,
+        "max": 630000
+      },
+      "villa": {
+        "min": 380000,
+        "max": 12000000
+      }
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/saadiyat-island/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-saadiyat-island.html"
+  },
+  {
+    "id": "yas",
+    "name": "Yas",
+    "summary": "Leisure-focused island with modern apartments, villa communities, parks and major attractions.",
+    "goodFor": [
+      "families"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 79000,
+        "max": 155000
+      },
+      "2br": {
+        "min": 109000,
+        "max": 300000
+      },
+      "3br": {
+        "min": 147000,
+        "max": 420000
+      },
+      "villa": {
+        "min": 115000,
+        "max": 1500000
+      }
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/yas-island/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-yas-island.html"
+  },
+  {
+    "id": "al-raha-beach",
+    "name": "Al Raha Beach",
+    "summary": "Waterfront apartments and villas with marinas, beach access, promenades and nearby schools.",
+    "goodFor": [
+      "beach"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 66100,
+        "max": 150000
+      },
+      "2br": {
+        "min": 105000,
+        "max": 199500
+      },
+      "3br": {
+        "min": 149900,
+        "max": 260000
+      },
+      "villa": {
+        "min": 185000,
+        "max": 525000
+      }
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/al-raha-beach/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-al-raha-beach.html"
+  },
+  {
+    "id": "khalifa-city",
+    "name": "Khalifa City",
+    "summary": "Low-density suburban community with villas, schools, parks and relatively spacious homes.",
+    "goodFor": [
+      "families"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 52000,
+        "max": 83000
+      },
+      "2br": {
+        "min": 68000,
+        "max": 127000
+      },
+      "3br": {
+        "min": 100000,
+        "max": 185000
+      },
+      "villa": {
+        "min": 62999,
+        "max": 549999
+      }
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/khalifa-city/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-khalifa-city.html"
+  },
+  {
+    "id": "al-reef",
+    "name": "Al Reef",
+    "summary": "Planned apartment-and-villa community with lower rents than island districts and family-oriented amenities.",
+    "goodFor": [
+      "budget"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 69900,
+        "max": 76000
+      },
+      "2br": {
+        "min": 83000,
+        "max": 105000
+      },
+      "3br": {
+        "min": 100000,
+        "max": 115000
+      },
+      "villa": {
+        "min": 100000,
+        "max": 170000
+      }
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/al-reef/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-al-reef.html"
+  },
+  {
+    "id": "masdar-city",
+    "name": "Masdar City",
+    "summary": "Sustainability-focused district with modern apartments and a compact, planned urban layout.",
+    "goodFor": [
+      "families"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 65000,
+        "max": 100000
+      },
+      "2br": {
+        "min": 85000,
+        "max": 140000
+      },
+      "3br": null,
+      "villa": null
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/masdar-city/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-masdar-city.html"
+  },
+  {
+    "id": "mbz-city",
+    "name": "MBZ City",
+    "summary": "Spacious outer-city apartments and villas with comparatively affordable rents and family-sized layouts.",
+    "goodFor": [
+      "budget"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 43000,
+        "max": 70000
+      },
+      "2br": {
+        "min": 75000,
+        "max": 90000
+      },
+      "3br": {
+        "min": 95000,
+        "max": 125000
+      },
+      "villa": {
+        "min": 75000,
+        "max": 600000
+      }
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/mohammed-bin-zayed-city/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-mohamed-bin-zayed-city.html"
+  },
+  {
+    "id": "corniche-al-bateen",
+    "name": "Corniche/Al Bateen",
+    "summary": "Established central waterfront district with apartments, villas and easy access to the Corniche.",
+    "goodFor": [
+      "beach"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 95000,
+        "max": 95000
+      },
+      "2br": {
+        "min": 100000,
+        "max": 150000
+      },
+      "3br": {
+        "min": 134900,
+        "max": 231000
+      },
+      "villa": {
+        "min": 105000,
+        "max": 1800000
+      }
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/al-bateen/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-al-bateen.html"
+  },
+  {
+    "id": "al-maryah-island",
+    "name": "Al Maryah Island",
+    "summary": "Business-district island with newer apartments and direct access to offices, retail and healthcare.",
+    "goodFor": [
+      "singles"
+    ],
+    "rentAED": {
+      "1br": {
+        "min": 73800,
+        "max": 300000
+      },
+      "2br": {
+        "min": 130000,
+        "max": 450000
+      },
+      "3br": {
+        "min": 140000,
+        "max": 200000
+      },
+      "villa": null
+    },
+    "commuteMinsToMaryah": null,
+    "listingLink": "https://www.bayut.com/to-rent/property/abu-dhabi/al-maryah-island/",
+    "sourceUrl": "https://www.propertyfinder.ae/en/rent/abu-dhabi/1-bedroom-apartments-for-rent-al-maryah-island.html"
+  }
+]
