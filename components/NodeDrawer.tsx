@@ -9,6 +9,13 @@ import AreaSelection from "./AreaSelection";
 import SchoolSelection from "./SchoolSelection";
 
 const number = (value: number) => value.toLocaleString("en-AE");
+const TAMM = "https://www.tamm.abudhabi";
+const siteNames: Record<string, string> = {
+  "www.mofa.gov.ae": "MOFA", "www.adek.gov.ae": "ADEK", "mohap.gov.ae": "MOHAP", "www.moccae.gov.ae": "MOCCAE",
+  "icp.gov.ae": "ICP", "www.seha.ae": "SEHA", "www.doh.gov.ae": "DoH", "uaepass.ae": "UAE Pass",
+  "www.tamm.abudhabi": "TAMM", "www.hub71.com": "Hub71", "www.adgm.com": "ADGM", "visitabudhabi.ae": "Visit Abu Dhabi",
+};
+const siteName = (url: string) => { const host = new URL(url).hostname; return siteNames[host] ?? host.replace(/^www\./, ""); };
 export default function NodeDrawer({ step, roadmap, profile, today, completed, chosenArea, onChooseArea, onClose, onDone, onSelect }: {
   step: Step; roadmap: Step[]; profile: Profile; today: string | null; completed: Set<string>; chosenArea: string | null;
   onChooseArea: (id: string) => void; onClose: () => void; onDone: (id: string) => void; onSelect: (id: string) => void;
@@ -20,6 +27,7 @@ export default function NodeDrawer({ step, roadmap, profile, today, completed, c
   const byId = new Map(roadmap.map((item) => [item.id, item]));
   const downstream = descendants(step.id, roadmap);
   const deadline = getDoByDate(step, moveDateOf(profile));
+  const checkLink = step.officialLink ?? TAMM;
   const tone = deadline && today && state !== "done" ? deadlineTone(deadline, today) : "upcoming";
   const daysLeft = deadline && today ? daysBetween(today, deadline) : null;
   useEffect(() => {
@@ -47,9 +55,9 @@ export default function NodeDrawer({ step, roadmap, profile, today, completed, c
       {deadline && <div className={`deadline-panel ${tone}`}><span>{tone === "overdue" ? "OVERDUE" : "DO BY"}</span><strong>{new Date(`${deadline}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}{state !== "done" && daysLeft !== null && <small>{daysLeft < 0 ? ` · ${-daysLeft} ${daysLeft === -1 ? "day" : "days"} late` : daysLeft === 0 ? " · today" : ` · ${daysLeft} ${daysLeft === 1 ? "day" : "days"} left`}</small>}</strong><p>{step.leadTimeDays ?? 30} days before your move date. Verify the required lead time.</p></div>}
       <section className="drawer-section"><h3>Needs</h3>{step.prerequisites.length ? <div className="dependency-list">{step.prerequisites.map((id) => <button key={id} onClick={() => onSelect(id)}><span className={`dependency-status ${completed.has(id) ? "complete" : ""}`}><Icon name={completed.has(id) ? "check" : "lock"} size={13} /></span><span>{byId.get(id)?.shortTitle}</span><Icon name="chevron" size={14} /></button>)}</div> : <p>No earlier steps. You can start here.</p>}</section>
       <section className="drawer-section"><h3>Unlocks <span>{downstream.size}</span></h3>{downstream.size ? <div className="unlock-tags">{[...downstream].map((id) => <button key={id} onClick={() => onSelect(id)}>{byId.get(id)?.shortTitle}</button>)}</div> : <p>{step.id === "settled" ? "Welcome to your next chapter." : "One more part of your move, taken care of."}</p>}{downstream.size > 0 && <p className="tiny-note">Downstream steps may also need other prerequisites.</p>}</section>
-      <section className="drawer-section"><h3>Documents</h3>{step.documents.length ? <ul>{step.documents.map((document) => <li key={document}>{document}</li>)}</ul> : <p>Verify required documents with the provider.</p>}</section>
-      <div className="drawer-metrics"><section><h3>Cost</h3><p>{step.costAED ? `AED ${number(step.costAED.min)}${step.costAED.max !== step.costAED.min ? `–${number(step.costAED.max)}` : ""}` : <span className="verify-tag">verify</span>}</p></section><section><h3>Time</h3><p>{step.durationDays ? `${step.durationDays.min}${step.durationDays.max !== step.durationDays.min ? `–${step.durationDays.max}` : ""} days` : <span className="verify-tag">verify</span>}</p></section></div>
-      <section className="drawer-section"><h3>Official link</h3>{step.officialLink ? <a className="external-link" href={step.officialLink} target="_blank" rel="noopener noreferrer">Visit official provider <Icon name="link" size={14} /></a> : <span className="verify-tag">verify</span>}</section>
+      <section className="drawer-section"><h3>Usually needed, confirm with the provider</h3>{step.documents.length ? <ul>{step.documents.map((document) => <li key={document}>{document}</li>)}</ul> : <p>Verify required documents with the provider.</p>}</section>
+      <div className="drawer-metrics"><section><h3>Cost</h3><p>{step.costAED ? `AED ${number(step.costAED.min)}${step.costAED.max !== step.costAED.min ? `–${number(step.costAED.max)}` : ""}` : <a className="check-link" href={checkLink} target="_blank" rel="noopener noreferrer">Check current fees <Icon name="link" size={12} /></a>}</p></section><section><h3>Time</h3><p>{step.durationDays ? `${step.durationDays.min}${step.durationDays.max !== step.durationDays.min ? `–${step.durationDays.max}` : ""} days` : <a className="check-link" href={checkLink} target="_blank" rel="noopener noreferrer">Check processing time <Icon name="link" size={12} /></a>}</p></section></div>
+      <section className="drawer-section"><h3>Official link</h3>{step.officialLink ? <a className="external-link" href={step.officialLink} target="_blank" rel="noopener noreferrer">Open {siteName(step.officialLink)} <Icon name="link" size={14} /></a> : <span className="verify-tag">verify</span>}</section>
       {!!step.tips.length && <section className="drawer-section"><h3>Good to know</h3><ul>{step.tips.map((tip) => <li key={tip}>{tip}</li>)}</ul></section>}
       {step.id === "lease_signing" && <AreaSelection profile={profile} chosenArea={chosenArea} onChooseArea={onChooseArea} />}
       {step.id === "school_enrolment" && <SchoolSelection chosenArea={chosenArea} onSelect={onSelect} />}

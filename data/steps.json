@@ -13,7 +13,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Attestation provider",
-    "officialLink": null,
+    "officialLink": "https://www.mofa.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -37,7 +37,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Attestation provider",
-    "officialLink": null,
+    "officialLink": "https://www.mofa.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -58,7 +58,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Attestation provider",
-    "officialLink": null,
+    "officialLink": "https://www.mofa.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -79,7 +79,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Current school",
-    "officialLink": null,
+    "officialLink": "https://www.adek.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -98,7 +98,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Relevant health authority",
-    "officialLink": null,
+    "officialLink": "https://mohap.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -119,7 +119,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Relevant import authority",
-    "officialLink": null,
+    "officialLink": "https://www.moccae.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -161,7 +161,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Hub71",
-    "officialLink": null,
+    "officialLink": "https://www.hub71.com",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -186,7 +186,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Company licensing authority",
-    "officialLink": null,
+    "officialLink": "https://www.adgm.com",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -211,7 +211,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Relevant immigration authority",
-    "officialLink": null,
+    "officialLink": "https://www.adgm.com",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -258,7 +258,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Visa sponsor",
-    "officialLink": null,
+    "officialLink": "https://icp.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -283,7 +283,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Hub71",
-    "officialLink": null,
+    "officialLink": "https://www.hub71.com",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -298,8 +298,6 @@
       "entry_permit",
       "medication_check",
       "temp_accommodation",
-      "community_join",
-      "ramadan_and_norms",
       "pet_import_permit"
     ],
     "appliesIf": {},
@@ -326,11 +324,15 @@
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
-    "documents": [],
+    "documents": [
+      "Passport",
+      "Entry permit",
+      "Photo"
+    ],
     "costAED": null,
     "durationDays": null,
     "provider": "Medical fitness centre",
-    "officialLink": null,
+    "officialLink": "https://www.seha.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -347,11 +349,16 @@
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
-    "documents": [],
+    "documents": [
+      "Passport",
+      "Entry permit",
+      "Medical result",
+      "Photo"
+    ],
     "costAED": null,
     "durationDays": null,
     "provider": "Identity authority",
-    "officialLink": null,
+    "officialLink": "https://icp.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -363,17 +370,21 @@
     "category": "identity",
     "phase": "landing",
     "prerequisites": [
-      "biometrics",
-      "golden_visa_check"
+      "biometrics"
     ],
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
-    "documents": [],
+    "documents": [
+      "Passport",
+      "Entry permit",
+      "Medical result",
+      "Photo"
+    ],
     "costAED": null,
     "durationDays": null,
     "provider": "Identity authority",
-    "officialLink": null,
+    "officialLink": "https://icp.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -390,7 +401,11 @@
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
-    "documents": [],
+    "documents": [
+      "Passport",
+      "Emirates ID",
+      "Salary certificate"
+    ],
     "costAED": null,
     "durationDays": null,
     "provider": "Chosen bank",
@@ -436,7 +451,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "UAE Pass",
-    "officialLink": null,
+    "officialLink": "https://uaepass.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -454,11 +469,15 @@
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
-    "documents": [],
+    "documents": [
+      "Passport",
+      "Emirates ID",
+      "Rent cheques"
+    ],
     "costAED": null,
     "durationDays": null,
     "provider": "Landlord or property agent",
-    "officialLink": null,
+    "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -479,7 +498,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Health insurer",
-    "officialLink": null,
+    "officialLink": "https://www.doh.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -500,7 +519,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "TAMM",
-    "officialLink": null,
+    "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -559,11 +578,14 @@
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
-    "documents": [],
+    "documents": [
+      "Tenancy contract",
+      "Emirates ID"
+    ],
     "costAED": null,
     "durationDays": null,
     "provider": "Tenancy registration authority",
-    "officialLink": null,
+    "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -584,7 +606,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "TAQA",
-    "officialLink": null,
+    "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -628,11 +650,17 @@
     },
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
-    "documents": [],
+    "documents": [
+      "Attested marriage certificate",
+      "Attested birth certificates",
+      "Tawtheeq",
+      "Salary certificate",
+      "Passports and photos"
+    ],
     "costAED": null,
     "durationDays": null,
     "provider": "Visa sponsor",
-    "officialLink": null,
+    "officialLink": "https://icp.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -658,7 +686,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Identity authority",
-    "officialLink": null,
+    "officialLink": "https://icp.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -679,11 +707,17 @@
     },
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
-    "documents": [],
+    "documents": [
+      "Attested birth certificate",
+      "Transfer certificate",
+      "Recent reports",
+      "Passport",
+      "Vaccination record"
+    ],
     "costAED": null,
     "durationDays": null,
     "provider": "Chosen school",
-    "officialLink": null,
+    "officialLink": "https://www.adek.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -706,7 +740,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Driving licensing authority",
-    "officialLink": null,
+    "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -730,7 +764,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Vehicle registration authority",
-    "officialLink": null,
+    "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -753,7 +787,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Darb",
-    "officialLink": null,
+    "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -776,7 +810,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Mawaqif",
-    "officialLink": null,
+    "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -787,7 +821,9 @@
     "shortTitle": "Golden Visa check",
     "category": "visa",
     "phase": "living",
-    "prerequisites": [],
+    "prerequisites": [
+      "emirates_id"
+    ],
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
@@ -795,7 +831,7 @@
     "costAED": null,
     "durationDays": null,
     "provider": "Relevant immigration authority",
-    "officialLink": null,
+    "officialLink": "https://icp.gov.ae",
     "tips": [],
     "sourceUrl": null,
     "lastVerified": null
@@ -806,7 +842,9 @@
     "shortTitle": "Join community",
     "category": "life",
     "phase": "living",
-    "prerequisites": [],
+    "prerequisites": [
+      "arrive"
+    ],
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
@@ -820,19 +858,63 @@
     "lastVerified": null
   },
   {
-    "id": "ramadan_and_norms",
-    "title": "Learn local norms and Ramadan customs",
-    "shortTitle": "Local norms",
+    "id": "things_to_do",
+    "title": "Explore things to do",
+    "shortTitle": "Things to do",
     "category": "life",
     "phase": "living",
-    "prerequisites": [],
+    "prerequisites": [
+      "arrive"
+    ],
     "appliesIf": {},
     "mustDoBeforeFlying": false,
     "leadTimeDays": null,
     "documents": [],
     "costAED": null,
     "durationDays": null,
-    "provider": "Self",
+    "provider": "Visit Abu Dhabi",
+    "officialLink": "https://visitabudhabi.ae",
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "find_doctor",
+    "title": "Find a doctor",
+    "shortTitle": "Find doctor",
+    "category": "health",
+    "phase": "living",
+    "prerequisites": [
+      "health_insurance_card"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Department of Health Abu Dhabi",
+    "officialLink": "https://www.doh.gov.ae",
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "credit_history",
+    "title": "Build credit history",
+    "shortTitle": "Credit history",
+    "category": "money",
+    "phase": "living",
+    "prerequisites": [
+      "bank_account"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Al Etihad Credit Bureau",
     "officialLink": null,
     "tips": [],
     "sourceUrl": null,
