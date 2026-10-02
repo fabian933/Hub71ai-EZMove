@@ -1,0 +1,858 @@
+[
+  {
+    "id": "degree_attestation",
+    "title": "Arrange degree attestation",
+    "shortTitle": "Degree attestation",
+    "category": "before_you_fly",
+    "phase": "before",
+    "prerequisites": [],
+    "appliesIf": {},
+    "mustDoBeforeFlying": true,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Attestation provider",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "marriage_cert_attestation",
+    "title": "Arrange marriage certificate attestation",
+    "shortTitle": "Marriage attestation",
+    "category": "before_you_fly",
+    "phase": "before",
+    "prerequisites": [],
+    "appliesIf": {
+      "household": [
+        "couple",
+        "family"
+      ]
+    },
+    "mustDoBeforeFlying": true,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Attestation provider",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "birth_cert_attestation",
+    "title": "Arrange birth certificate attestation",
+    "shortTitle": "Birth attestation",
+    "category": "before_you_fly",
+    "phase": "before",
+    "prerequisites": [],
+    "appliesIf": {
+      "minKids": 1
+    },
+    "mustDoBeforeFlying": true,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Attestation provider",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "school_records",
+    "title": "Collect school records",
+    "shortTitle": "School records",
+    "category": "before_you_fly",
+    "phase": "before",
+    "prerequisites": [],
+    "appliesIf": {
+      "minKids": 1
+    },
+    "mustDoBeforeFlying": true,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Current school",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "medication_check",
+    "title": "Check medication requirements",
+    "shortTitle": "Medication check",
+    "category": "before_you_fly",
+    "phase": "before",
+    "prerequisites": [],
+    "appliesIf": {},
+    "mustDoBeforeFlying": true,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Relevant health authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "pet_import_permit",
+    "title": "Arrange a pet import permit",
+    "shortTitle": "Pet import",
+    "category": "before_you_fly",
+    "phase": "before",
+    "prerequisites": [],
+    "appliesIf": {
+      "hasPets": true
+    },
+    "mustDoBeforeFlying": true,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Relevant import authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "temp_accommodation",
+    "title": "Arrange temporary accommodation",
+    "shortTitle": "Temporary stay",
+    "category": "before_you_fly",
+    "phase": "before",
+    "prerequisites": [],
+    "appliesIf": {},
+    "mustDoBeforeFlying": true,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Accommodation provider",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "hub71_acceptance",
+    "title": "Confirm Hub71 acceptance",
+    "shortTitle": "Hub71 acceptance",
+    "category": "hub71",
+    "phase": "before",
+    "prerequisites": [],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Hub71",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "company_licence",
+    "title": "Arrange company licence",
+    "shortTitle": "Company licence",
+    "category": "hub71",
+    "phase": "before",
+    "prerequisites": [
+      "hub71_acceptance"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Company licensing authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "establishment_card",
+    "title": "Arrange establishment card",
+    "shortTitle": "Establishment card",
+    "category": "hub71",
+    "phase": "before",
+    "prerequisites": [
+      "company_licence"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Relevant immigration authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "founder_visa",
+    "title": "Arrange founder visa",
+    "shortTitle": "Founder visa",
+    "category": "hub71",
+    "phase": "before",
+    "prerequisites": [
+      "establishment_card"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Visa sponsor",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "entry_permit",
+    "title": "Arrange entry permit",
+    "shortTitle": "Entry permit",
+    "category": "visa",
+    "phase": "before",
+    "prerequisites": [
+      "founder_visa"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Visa sponsor",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "hub71_incentives",
+    "title": "Confirm Hub71 incentives",
+    "shortTitle": "Hub71 incentives",
+    "category": "hub71",
+    "phase": "settling",
+    "prerequisites": [
+      "hub71_acceptance"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Hub71",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "arrive",
+    "title": "Arrive in Abu Dhabi",
+    "shortTitle": "Arrive",
+    "category": "visa",
+    "phase": "landing",
+    "prerequisites": [
+      "entry_permit"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Self",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "medical_fitness",
+    "title": "Complete medical fitness screening",
+    "shortTitle": "Medical fitness",
+    "category": "health",
+    "phase": "landing",
+    "prerequisites": [
+      "arrive"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Medical fitness centre",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "biometrics",
+    "title": "Complete biometrics appointment",
+    "shortTitle": "Biometrics",
+    "category": "identity",
+    "phase": "landing",
+    "prerequisites": [
+      "medical_fitness"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Identity authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "emirates_id",
+    "title": "Obtain Emirates ID",
+    "shortTitle": "Emirates ID",
+    "category": "identity",
+    "phase": "landing",
+    "prerequisites": [
+      "biometrics"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Identity authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "bank_account",
+    "title": "Open a bank account",
+    "shortTitle": "Bank account",
+    "category": "money",
+    "phase": "settling",
+    "prerequisites": [
+      "emirates_id"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Chosen bank",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "mobile_plan",
+    "title": "Set up a mobile plan",
+    "shortTitle": "Mobile plan",
+    "category": "life",
+    "phase": "settling",
+    "prerequisites": [
+      "emirates_id"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Chosen mobile provider",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "uae_pass",
+    "title": "Set up UAE Pass",
+    "shortTitle": "UAE Pass",
+    "category": "identity",
+    "phase": "settling",
+    "prerequisites": [
+      "emirates_id"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "UAE Pass",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "lease_signing",
+    "title": "Sign a housing lease",
+    "shortTitle": "Sign lease",
+    "category": "housing",
+    "phase": "settling",
+    "prerequisites": [
+      "emirates_id",
+      "rent_cheques"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Landlord or property agent",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "health_insurance_card",
+    "title": "Obtain health insurance card",
+    "shortTitle": "Health insurance",
+    "category": "health",
+    "phase": "settling",
+    "prerequisites": [
+      "emirates_id"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Health insurer",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "tamm_account",
+    "title": "Set up a TAMM account",
+    "shortTitle": "TAMM account",
+    "category": "identity",
+    "phase": "settling",
+    "prerequisites": [
+      "uae_pass"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "TAMM",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "salary_transfer",
+    "title": "Arrange salary transfer",
+    "shortTitle": "Salary transfer",
+    "category": "money",
+    "phase": "settling",
+    "prerequisites": [
+      "bank_account"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Employer and bank",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "rent_cheques",
+    "title": "Arrange rent cheques",
+    "shortTitle": "Rent cheques",
+    "category": "money",
+    "phase": "settling",
+    "prerequisites": [
+      "bank_account"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Chosen bank",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "tawtheeq",
+    "title": "Register the tenancy",
+    "shortTitle": "Tawtheeq",
+    "category": "housing",
+    "phase": "settling",
+    "prerequisites": [
+      "lease_signing"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Tenancy registration authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "utilities_taqa",
+    "title": "Connect home utilities",
+    "shortTitle": "Home utilities",
+    "category": "housing",
+    "phase": "settling",
+    "prerequisites": [
+      "tawtheeq"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "TAQA",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "internet_setup",
+    "title": "Set up home internet",
+    "shortTitle": "Home internet",
+    "category": "housing",
+    "phase": "settling",
+    "prerequisites": [
+      "tawtheeq"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Chosen internet provider",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "family_visa",
+    "title": "Arrange family visa",
+    "shortTitle": "Family visa",
+    "category": "family",
+    "phase": "settling",
+    "prerequisites": [
+      "tawtheeq",
+      "marriage_cert_attestation"
+    ],
+    "appliesIf": {
+      "household": [
+        "couple",
+        "family"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Visa sponsor",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "dependant_emirates_id",
+    "title": "Obtain dependant Emirates ID",
+    "shortTitle": "Dependant Emirates ID",
+    "category": "family",
+    "phase": "settling",
+    "prerequisites": [
+      "family_visa"
+    ],
+    "appliesIf": {
+      "household": [
+        "couple",
+        "family"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Identity authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "school_enrolment",
+    "title": "Complete school enrolment",
+    "shortTitle": "School enrolment",
+    "category": "family",
+    "phase": "settling",
+    "prerequisites": [
+      "dependant_emirates_id",
+      "school_records",
+      "birth_cert_attestation"
+    ],
+    "appliesIf": {
+      "minKids": 1
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Chosen school",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "licence_conversion",
+    "title": "Arrange driving licence conversion",
+    "shortTitle": "Driving licence",
+    "category": "transport",
+    "phase": "settling",
+    "prerequisites": [
+      "emirates_id"
+    ],
+    "appliesIf": {
+      "drives": true
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Driving licensing authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "car_registration",
+    "title": "Register your car",
+    "shortTitle": "Car registration",
+    "category": "transport",
+    "phase": "settling",
+    "prerequisites": [
+      "licence_conversion",
+      "tamm_account"
+    ],
+    "appliesIf": {
+      "drives": true
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Vehicle registration authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "darb_toll",
+    "title": "Set up Darb toll account",
+    "shortTitle": "Darb toll",
+    "category": "transport",
+    "phase": "settling",
+    "prerequisites": [
+      "car_registration"
+    ],
+    "appliesIf": {
+      "drives": true
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Darb",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "mawaqif_parking",
+    "title": "Arrange Mawaqif parking",
+    "shortTitle": "Mawaqif parking",
+    "category": "transport",
+    "phase": "settling",
+    "prerequisites": [
+      "car_registration"
+    ],
+    "appliesIf": {
+      "drives": true
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Mawaqif",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "golden_visa_check",
+    "title": "Check Golden Visa eligibility",
+    "shortTitle": "Golden Visa check",
+    "category": "visa",
+    "phase": "living",
+    "prerequisites": [],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Relevant immigration authority",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "community_join",
+    "title": "Find your community",
+    "shortTitle": "Join community",
+    "category": "life",
+    "phase": "living",
+    "prerequisites": [],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Chosen community",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "ramadan_and_norms",
+    "title": "Learn local norms and Ramadan customs",
+    "shortTitle": "Local norms",
+    "category": "life",
+    "phase": "living",
+    "prerequisites": [],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Self",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "settled",
+    "title": "Settled in Abu Dhabi",
+    "shortTitle": "Settled",
+    "category": "life",
+    "phase": "settling",
+    "prerequisites": [
+      "utilities_taqa",
+      "bank_account",
+      "uae_pass",
+      "school_enrolment"
+    ],
+    "appliesIf": {},
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "provider": "Self",
+    "officialLink": null,
+    "tips": [],
+    "sourceUrl": null,
+    "lastVerified": null
+  }
+]
