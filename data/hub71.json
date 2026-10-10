@@ -1,0 +1,10 @@
+[
+  { "id": "hub71_acceptance", "stepId": "hub71_acceptance", "title": "Confirm Hub71 acceptance", "detail": "Your acceptance is the starting point for every Hub71 benefit.", "link": "https://www.hub71.com", "illustrative": false },
+  { "id": "company_licence", "stepId": "company_licence", "title": "Arrange your company licence", "detail": "Licence your company so it can sponsor visas and sign contracts.", "link": "https://www.adgm.com", "illustrative": false },
+  { "id": "establishment_card", "stepId": "establishment_card", "title": "Arrange your establishment card", "detail": "Lets your company sponsor your visa and your team's.", "link": "https://www.adgm.com", "illustrative": false },
+  { "id": "founder_visa", "stepId": "founder_visa", "title": "Arrange your founder visa", "detail": "Unlocks your entry permit and the rest of your settling-in map.", "link": null, "illustrative": false },
+  { "id": "hub71_incentives", "stepId": "hub71_incentives", "title": "Confirm your Hub71 incentives", "detail": "Ask Hub71 which incentives apply to your programme and how to claim them.", "link": "https://www.hub71.com", "illustrative": false },
+  { "id": "hub71_workspace", "stepId": null, "title": "Set up in your Hub71 workspace", "detail": "Ask Hub71 which workspace options come with your programme.", "link": "https://www.hub71.com", "illustrative": true },
+  { "id": "team_relocation", "stepId": null, "title": "Relocate your first hires", "detail": "Invite hires so each one gets their own map, and track their progress.", "link": null, "illustrative": true },
+  { "id": "hub71_network", "stepId": null, "title": "Join Hub71 community sessions", "detail": "Ask Hub71 about upcoming sessions, mentors and partner access.", "link": "https://www.hub71.com", "illustrative": true }
+]

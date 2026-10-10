@@ -40,6 +40,8 @@ export function layoutMap(roadmap: readonly Step[]): { nodes: MapNode[]; edges: 
     .force("y", forceY<MapNode>((node) => node.targetY).strength(0.12));
   simulation.tick(360);
   simulation.stop();
+  // Round so server and browser render identical coordinates (float noise differs between runtimes).
+  for (const node of nodes) { node.x = Math.round(node.x * 10) / 10; node.y = Math.round(node.y * 10) / 10; }
   return { nodes, edges };
 }
 
