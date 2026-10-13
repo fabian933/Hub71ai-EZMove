@@ -120,7 +120,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .uae-pass-button.signed-in { background: transparent; color: #b9d4b0; border: 1px solid #4d6b55; }
 .uae-pass-button.signed-in:hover:not(:disabled) { background: #2d4a3c; }
 .map-stage { flex: 1; position: relative; min-height: 0; overflow: hidden; background-image: radial-gradient(#5c745338 .65px, transparent .65px); background-size: 24px 24px; }
-.map-caption { position: absolute; top: 24px; left: 28px; pointer-events: none; z-index: 1; }
+.map-caption { position: absolute; top: 18px; left: 28px; pointer-events: none; z-index: 1; display: grid; gap: 6px; justify-items: start; }
+.map-caption button { pointer-events: auto; }
+.map-caption p { margin: 0; }
 .map-caption .eyebrow { font-size: 8px; color: #6f8c73; letter-spacing: 1.6px; }
 .map-caption h1 { font: 26px/1.25 Georgia, serif; color: #c9d9c7; margin: 8px 0 6px; }
 .map-caption p { font-size: 10px; color: #78917a; }
@@ -358,6 +360,58 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .sent-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 .sent-actions button, .sent-actions a { display: inline-flex; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 7px; border: 1px solid #dce4d8; background: #fff; color: #4e7551; font-size: 10px; }
 .team-link { color: #c7edb7; }
+/* Card dashboard (default view on /map). */
+.connect-toggle { margin-left: auto; align-self: center; display: inline-flex !important; align-items: center; gap: 6px; padding: 7px 12px !important; margin-bottom: 6px; border-radius: 20px !important; border: 1px solid #4d6b55 !important; color: #c6d9bf !important; font-size: 11px !important; }
+.connect-toggle.active { background: #2d4a3c !important; color: #e5efd8 !important; }
+.header-progress { display: flex; align-items: center; gap: 8px; font-size: 10px; color: #9cb29f; }
+.header-progress .progress-track { width: 110px; flex-shrink: 0; }
+.header-progress .progress-track > span { display: block; height: 100%; background: #b4db9f; border-radius: inherit; }
+.dashboard-inner { max-width: 1120px; margin: 0 auto; padding: 24px 28px 70px; }
+.next-up-row h2, .lane-heading h2 { font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: #9cb29f; font-weight: 600; margin: 0; }
+.next-up-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.next-up-card { display: grid; gap: 6px; }
+.next-up-lane { font-size: 9px; color: #7f9a84; letter-spacing: .3px; }
+.next-up-card .step-card { height: 100%; border-color: #6d9a7a; background: #26453a; }
+.lanes { display: grid; gap: 18px; margin-top: 30px; align-items: start; }
+.lanes.two { grid-template-columns: 1fr 1fr; }
+.lanes.one { max-width: 640px; }
+.lane { border: 1px solid #34503f; border-radius: 16px; padding: 18px; background: #1b3229; }
+.lane-company { border-color: #44607e66; background: #1b3030; }
+.lane-heading { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 4px; }
+.lane-heading > span { font-size: 10px; color: #7f9a84; }
+.lane-link { margin-left: auto; display: inline-flex; align-items: center; gap: 3px; border: 0; background: none; padding: 0; color: #b9d0ec; font-size: 10px; }
+.lane-group { display: grid; gap: 8px; margin-top: 16px; }
+.lane-group h3 { margin: 0; font-size: 10px; font-weight: 600; color: #8fa78d; }
+.lane-done summary { display: flex; align-items: center; justify-content: space-between; cursor: pointer; list-style: none; }
+.lane-done summary::-webkit-details-marker { display: none; }
+.lane-done summary h3 span { color: #6f8c73; font-weight: 400; margin-left: 4px; }
+.lane-done[open] summary svg { transform: rotate(90deg); }
+.lane-done[open] { gap: 8px; }
+.lane-empty { font-size: 11px; color: #7f9a84; margin: 12px 0 0; }
+.step-card { display: grid; gap: 8px; width: 100%; text-align: left; padding: 13px 14px; border-radius: 11px; border: 1px solid #3d5a47; background: #213b31; color: #d9e7dc; cursor: pointer; transition: border-color .15s, background .15s; }
+.step-card:hover { border-color: #6d9a7a; }
+.step-card.waiting { background: #1e342b; border-color: #2f4a3b; }
+.step-card.waiting .step-card-title { color: #a9bdab; }
+.step-card.done { background: #1e3a2f; border-color: #3f6a4f; }
+.step-card-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; font-size: 13px; line-height: 1.35; color: #e5efd8; }
+.step-card-title .guide-tag { flex-shrink: 0; margin-top: 1px; }
+.step-status { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; line-height: 1.3; }
+.step-status.done { color: #b4db9f; }
+.step-status.now { color: #b7f3da; font-weight: 600; }
+.step-status.now .status-dot { background: #b7f3da; box-shadow: 0 0 8px #b7f3da80; }
+.step-status.now.soon { color: #f1b955; }
+.step-status.now.soon .status-dot { background: #f1b955; box-shadow: none; }
+.step-status.now.overdue { color: #f0897c; }
+.step-status.now.overdue .status-dot { background: #f0897c; box-shadow: none; }
+.step-status.waiting { color: #8a9c8c; }
+.step-status em { font-style: normal; font-size: 9px; padding: 1px 6px; border-radius: 10px; border: 1px solid #44607e; color: #b9d0ec; }
+.view-back { display: inline-flex; align-items: center; gap: 5px; margin-bottom: 18px; padding: 0; border: 0; background: none; color: #b4db9f; font-size: 11px; }
+.why-section { border-top: 0; padding-top: 0; }
+.why-section p { color: #5f7a57 !important; font-size: 12px !important; }
+.dependency-list { display: flex !important; flex-wrap: wrap; }
+.dependency-list > button { padding: 6px 10px 6px 6px !important; border-radius: 20px !important; }
+.dependency-list > button > span:last-child small { margin-left: 6px; font-size: 9px; color: #5a7aa0; }
+.map-toast { position: fixed !important; z-index: 15; }
 @media (min-width: 1500px) { .map-caption { top: 32px; left: 38px; } }
 @media (max-width: 1100px) {
   .home-page { padding: 0 35px; }
@@ -395,6 +449,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .share-button > span { display: none; }
   .map-toolbar { flex-direction: column; align-items: stretch; gap: 12px; padding: 12px 18px; }
   .view-tabs { padding: 4px 18px 0; }
+  .dashboard-inner { padding: 18px 16px 60px; }
+  .next-up-cards { grid-template-columns: 1fr; }
+  .lanes.two { grid-template-columns: 1fr; }
+  .lane { padding: 15px 13px; }
+  .connect-toggle { padding: 6px 10px !important; }
   .view-tabs button { padding: 9px 10px 11px; font-size: 11px; }
   .view-inner { padding: 24px 18px 50px; }
   .view-heading h1 { font-size: 26px; }
@@ -447,6 +506,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .view-tabs { padding-left: 10px; padding-right: 10px; }
   .view-tabs button { padding-left: 8px; padding-right: 8px; gap: 5px; }
   .team-card { padding: 18px 15px; }
+  .connect-toggle { font-size: 10px !important; }
+  .header-progress .progress-track { width: 70px; }
   .next-up { padding: 9px 14px; }
   .uae-pass-button { max-width: 102px; white-space: normal; line-height: 1.2; text-align: center; }
   .hub71-badge { position: absolute; bottom: 9px; left: 14px; z-index: 2; }

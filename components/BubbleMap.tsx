@@ -2,21 +2,20 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { criticalPath, daysBetween, deadlineTone, downstreamUnlockCounts, getDoByDate, getState, loadCompletedIds, moveDateOf, nextUpSteps, personalise, saveCompletedIds, todayISO, type DeadlineTone } from "@/lib/engine";
-import { categoryStyles, descendants, layoutMap, settlementSteps, type MapNode } from "@/lib/map";
+import { criticalPath, daysBetween, deadlineTone, downstreamUnlockCounts, getDoByDate, getState, loadCompletedIds, moveDateOf, personalise, saveCompletedIds, todayISO, type DeadlineTone } from "@/lib/engine";
+import { categoryStyles, descendants, layoutMap, type MapNode } from "@/lib/map";
 import { countryName } from "@/lib/profile";
 import { loadChosenArea, saveChosenArea } from "@/lib/areas";
 import type { Profile, Step } from "@/lib/schema";
 import Icon from "./Icon";
 import NodeDrawer from "./NodeDrawer";
 import LivingHere from "./LivingHere";
+import Dashboard from "./Dashboard";
 import Hub71Track from "./Hub71Track";
 import { hub71Track, loadTrackDone, saveTrackDone } from "@/lib/hub71";
 import { encodeProfile } from "@/lib/profile";
 
 type View = { x: number; y: number; scale: number };
-type PhaseFilter = Step["phase"] | "all";
-const phases: { value: PhaseFilter; label: string }[] = [{ value: "all", label: "All" }, { value: "before", label: "Before you arrive" }, { value: "landing", label: "Landed" }, { value: "settling", label: "Settling" }];
 const badgeColors: Record<DeadlineTone, { fill: string; text: string }> = {
   upcoming: { fill: "#e5d3b1", text: "#3b3529" },
   soon: { fill: "#f1b955", text: "#3d2c0b" },
@@ -74,7 +73,7 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
   const [trackDone, setTrackDone] = useState<Set<string>>(new Set());
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [loaded, setLoaded] = useState(false);
-  const [phase, setPhase] = useState<PhaseFilter>("all");
+  const [connect, setConnect] = useState(false);
   const [showCritical, setShowCritical] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [hovered, setHovered] = useState<string | null>(null);
@@ -96,7 +95,6 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
   const viewRef = useRef(view);
   const sizeRef = useRef(size);
   const hasSized = useRef(false);
-  const firstPhase = useRef(true);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const gesture = useRef<{ x: number; y: number; view: View; distance: number; moved: boolean } | null>(null);
   const suppressClick = useRef(false);
@@ -106,11 +104,10 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
   const counts = useMemo(() => downstreamUnlockCounts(roadmap, completed), [roadmap, completed]);
   const criticalIds = useMemo(() => new Set(criticalPath(roadmap, completed).map((step) => step.id)), [roadmap, completed]);
   const downstream = useMemo(() => hovered ? descendants(hovered, roadmap) : new Set<string>(), [hovered, roadmap]);
-  const required = useMemo(() => settlementSteps(roadmap), [roadmap]);
-  const requiredSteps = roadmap.filter((step) => required.has(step.id) && step.id !== "settled");
-  const progressCount = requiredSteps.filter((step) => completed.has(step.id)).length;
-  const progress = requiredSteps.length ? Math.round(progressCount / requiredSteps.length * 100) : 100;
-  const visible = useMemo(() => layout.nodes.filter((node) => phase === "all" || node.step.phase === phase), [layout, phase]);
+  const countedSteps = mapRoadmap.filter((step) => step.id !== "settled");
+  const progressCount = countedSteps.filter((step) => completed.has(step.id)).length;
+  const progress = countedSteps.length ? Math.round(progressCount / countedSteps.length * 100) : 100;
+  const visible = layout.nodes;
   const visibleIds = new Set(visible.map((node) => node.id));
   const selectedStep = roadmap.find((step) => step.id === selected);
   const hoverStep = roadmap.find((step) => step.id === hovered);
@@ -122,7 +119,6 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
   const teamHref = `/team?p=${encodeProfile(profile)}`;
   const persist = (ids: Set<string>) => viewer ? true : saveCompletedIds(ids);
   const moveDate = moveDateOf(profile);
-  const nextUp = nextUpSteps(roadmap.filter((step) => step.phase !== "living"), completed, moveDate);
   const daysToMove = today ? daysBetween(today, moveDate) : null;
 
   useEffect(() => {
@@ -137,6 +133,8 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
     if (!stage.current) return;
     const observer = new ResizeObserver(([entry]) => {
       const next = { width: entry.contentRect.width, height: entry.contentRect.height };
+      // The map is hidden behind the dashboard until "See how it connects"; skip the 0×0 sizes.
+      if (!next.width || !next.height) return;
       const previousSize = sizeRef.current;
       sizeRef.current = next;
       setSize(next);
@@ -173,12 +171,6 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
     return () => element.removeEventListener("wheel", onWheel);
   }, [updateView]);
   function fitMap() { updateView(fittedView(visible, sizeRef.current)); }
-  useEffect(() => {
-    if (firstPhase.current) { firstPhase.current = false; return; }
-    fitMap();
-  // Fit only when the chosen phase changes, not on pointer movement.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
   function zoom(factor: number) {
     const current = viewRef.current;
     const scale = clampScale(current.scale * factor); const ratio = scale / current.scale;
@@ -320,21 +312,18 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
   }
   function isDimmed(id: string) { return (hovered && id !== hovered && !downstream.has(id)) || (showCritical && !criticalIds.has(id)); }
   return <main className="map-page">
-    <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>{viewer ? `${viewer.name}’s roadmap` : "Your Abu Dhabi roadmap"}</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}</span><span className="move-countdown">Moving {formatDate(moveDate)}{daysToMove !== null && ` · ${countdown(daysToMove)}`}</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions">{viewer ? <><span className="sample-tag on-dark">Sample progress</span><Link href={viewer.backHref} className="share-button">Back to team</Link></> : <>{signedIn.length ? <button className="uae-pass-button signed-in" disabled={demoRunning} onClick={signOut}>Signed in · Sign out</button> : <button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button>}{isFounder && <Link href={teamHref} className="edit-profile team-link">Team</Link>}<Link href="/" className="edit-profile">Edit profile</Link><button type="button" className="edit-profile reset-progress" disabled={demoRunning || !completed.size} onClick={resetProgress}>Reset progress</button><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></>}</div></header>
+    <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>{viewer ? `${viewer.name}’s move` : "Your move. Made easy."}</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}{profile.invitedBy ? ` · Joining ${profile.invitedBy}` : ""}</span><span className="move-countdown">Moving {formatDate(moveDate)}{daysToMove !== null && ` · ${countdown(daysToMove)}`}</span>
+      <span className="header-progress"><span className="progress-track" role="progressbar" aria-label="Steps done" aria-valuemin={0} aria-valuemax={countedSteps.length} aria-valuenow={progressCount}><motion.span animate={{ width: `${progress}%` }} transition={{ duration: reducedMotion ? 0 : 0.6 }} /></span>{progressCount} of {countedSteps.length} steps done</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions">{viewer ? <><span className="sample-tag on-dark">Sample progress</span><Link href={viewer.backHref} className="share-button">Back to team</Link></> : <>{signedIn.length ? <button className="uae-pass-button signed-in" disabled={demoRunning} onClick={signOut}>Signed in · Sign out</button> : <button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button>}{isFounder && <Link href={teamHref} className="edit-profile team-link">Team</Link>}<Link href="/" className="edit-profile">Edit profile</Link><button type="button" className="edit-profile reset-progress" disabled={demoRunning || !completed.size} onClick={resetProgress}>Reset progress</button><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></>}</div></header>
     <nav className="view-tabs" aria-label="Your move">
       <button type="button" className={tab === "settling" ? "active" : ""} aria-pressed={tab === "settling"} onClick={() => openTab("settling")}><small>1</small>Settling in</button>
       <button type="button" className={tab === "living" ? "active" : ""} aria-pressed={tab === "living"} onClick={() => openTab("living")}><small>2</small>Living here</button>
-      {isFounder && <button type="button" className={tab === "hub71" ? "active" : ""} aria-pressed={tab === "hub71"} onClick={() => openTab("hub71")}>Hub71 track<em>{trackSummary.done}/{trackSummary.total}</em></button>}
+      {tab === "settling" && <button type="button" className={`connect-toggle ${connect ? "active" : ""}`} aria-pressed={connect} onClick={() => { setConnect(!connect); setHovered(null); }}><Icon name={connect ? "close" : "spark"} size={13} />{connect ? "Back to dashboard" : "See how it connects"}</button>}
     </nav>
-    <div className="settle-view" style={tab === "settling" ? undefined : { display: "none" }}>
-    <div className="map-toolbar"><div className="phase-filters" aria-label="Filter by phase">{phases.map((item) => <button key={item.value} className={phase === item.value ? "active" : ""} aria-pressed={phase === item.value} onClick={() => { setPhase(item.value); setHovered(null); }}>{item.label}</button>)}</div><div className="toolbar-right"><button className={`critical-toggle ${showCritical ? "active" : ""}`} aria-pressed={showCritical} onClick={() => setShowCritical(!showCritical)}><Icon name="spark" size={14} />Critical path</button><div className="settlement-progress"><div><span>{completed.has("settled") ? "Settled" : "To settled"}</span><b>{progress}%</b></div><div className="progress-track" role="progressbar" aria-label="Progress to settled" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><motion.div animate={{ width: `${progress}%` }} transition={{ duration: reducedMotion ? 0 : 0.6 }} /></div></div></div></div>
-    {nextUp.length > 0 && <nav className="next-up" aria-label="Next up"><span>Next up</span>{nextUp.map(({ step, doBy }) => {
-      const tone = doBy && today ? deadlineTone(doBy, today) : null;
-      return <button type="button" key={step.id} onClick={() => setSelected(step.id)}><i style={{ background: categoryStyles[step.category].color }} />{step.shortTitle}{doBy && <small className={tone ?? ""}>{tone === "overdue" ? "Overdue" : `by ${new Date(`${doBy}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })}`}</small>}</button>;
-    })}</nav>}
+    {tab === "settling" && !connect && <Dashboard roadmap={roadmap} completed={completed} moveDate={moveDate} today={today} isFounder={isFounder} onSelect={setSelected} onOpenTrack={() => openTab("hub71")} />}
+    <div className="settle-view" style={tab === "settling" && connect ? undefined : { display: "none" }}>
     <div className="map-stage" ref={stage}>
       {completed.has("settled") && <button type="button" className="settled-nudge" onClick={() => openTab("living")}><Icon name="check" size={14} />You’re settled. Next: Living here <Icon name="chevron" size={13} /></button>}
-      <div className="map-caption"><span className="eyebrow">YOUR MOVE, CONNECTED</span><h1>{phase === "all" ? "One step opens the next." : phases.find((item) => item.value === phase)?.label}</h1><p>{showCritical ? "Your longest remaining route to settled." : "Tap a bubble to see what comes next."}</p></div>
+      <div className="map-caption"><button type="button" className={`critical-toggle ${showCritical ? "active" : ""}`} aria-pressed={showCritical} onClick={() => setShowCritical(!showCritical)}><Icon name="spark" size={14} />Critical path</button><p>{showCritical ? "Your longest remaining route to settled." : "Tap a bubble to see what comes next."}</p></div>
       <svg ref={svg} className="bubble-svg" width="100%" height="100%" viewBox={`0 0 ${size.width} ${size.height}`} role="group" aria-label="Interactive relocation map. Drag to pan, pinch or scroll to zoom. Use Tab to focus steps and Enter to open details." tabIndex={0} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onKeyDown={(event) => {
         if (event.target !== event.currentTarget) return;
         if (event.key === "+" || event.key === "=") { event.preventDefault(); zoom(1.25); }
@@ -376,12 +365,12 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
       {hoverStep && <div role="tooltip" className="map-tooltip"><strong>{hoverStep.shortTitle}</strong><span>Unlocks {counts[hoverStep.id]} steps: {hoverUnlocks.slice(0, 5).join(", ") || "none"}{hoverUnlocks.length > 5 ? `, +${hoverUnlocks.length - 5} more` : ""}</span></div>}
       <div className="map-controls"><button aria-label="Zoom in" onClick={() => zoom(1.25)}><Icon name="plus" /></button><button aria-label="Zoom out" onClick={() => zoom(0.8)}><Icon name="minus" /></button><span /><button aria-label="Fit all visible steps" onClick={fitMap}><Icon name="fit" size={17} /></button></div>
       <div className="map-bottom-note"><span>Drag to explore · Pinch to zoom</span><button onClick={() => setListOpen(true)}>View steps as list <Icon name="chevron" size={12} /></button></div>
-      <AnimatePresence>{announcement && <motion.div key={announcement} className="map-toast" role="status" initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }}><Icon name="check" size={16} /><span>{announcement}</span><button aria-label="Dismiss message" onClick={() => setAnnouncement("")}><Icon name="close" size={13} /></button></motion.div>}</AnimatePresence>
     </div>
     <footer className="map-legend"><div className="category-legend">{categories.map((category) => <span key={category}><i style={{ background: categoryStyles[category].color }} />{categoryStyles[category].label}</span>)}</div><div className="state-legend"><span><i className="legend-done" />Done</span><span><i className="legend-ready" />Available</span><span><Icon name="lock" size={11} />Locked</span></div></footer>
     </div>
     {tab === "living" && <LivingHere roadmap={roadmap} completed={completed} chosenArea={chosenArea} isFounder={isFounder} trackSummary={trackSummary} onSelect={setSelected} onOpenTrack={() => openTab("hub71")} />}
-    {tab === "hub71" && isFounder && <Hub71Track roadmap={roadmap} completed={completed} trackDone={trackDone} teamHref={teamHref} readOnly={!!viewer} onDone={markDone} onToggle={toggleTrack} onSelect={setSelected} />}
+    {tab === "hub71" && isFounder && <Hub71Track onBack={() => openTab("settling")} roadmap={roadmap} completed={completed} trackDone={trackDone} teamHref={teamHref} readOnly={!!viewer} onDone={markDone} onToggle={toggleTrack} onSelect={setSelected} />}
+    <AnimatePresence>{announcement && <motion.div key={announcement} className="map-toast" role="status" initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }}><Icon name="check" size={16} /><span>{announcement}</span><button aria-label="Dismiss message" onClick={() => setAnnouncement("")}><Icon name="close" size={13} /></button></motion.div>}</AnimatePresence>
     {storageWarning && <div className="storage-warning" role="status">Progress is kept for this visit. Browser storage is unavailable.</div>}
     {!loaded && <span className="sr-only">Loading saved progress</span>}
     <AnimatePresence>{selectedStep && <NodeDrawer key="step-drawer" step={selectedStep} roadmap={roadmap} profile={profile} today={today} completed={completed} chosenArea={chosenArea} onChooseArea={chooseArea} onClose={closeDrawer} onDone={markDone} onSelect={setSelected} />}</AnimatePresence>

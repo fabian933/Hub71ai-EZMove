@@ -8,9 +8,9 @@ import Icon from "./Icon";
 const siteName = (url: string) => ({ "www.hub71.com": "Hub71", "www.adgm.com": "ADGM" } as Record<string, string>)[new URL(url).hostname] ?? new URL(url).hostname;
 
 
-export default function Hub71Track({ roadmap, completed, trackDone, teamHref, readOnly, onDone, onToggle, onSelect }: {
+export default function Hub71Track({ roadmap, completed, trackDone, teamHref, readOnly, onBack, onDone, onToggle, onSelect }: {
   roadmap: readonly Step[]; completed: ReadonlySet<string>; trackDone: ReadonlySet<string>; teamHref: string; readOnly: boolean;
-  onDone: (stepId: string) => void; onToggle: (itemId: string) => void; onSelect: (stepId: string) => void;
+  onBack: () => void; onDone: (stepId: string) => void; onToggle: (itemId: string) => void; onSelect: (stepId: string) => void;
 }) {
   const byId = new Map(roadmap.map((step) => [step.id, step]));
   const items = hub71Track.filter((item) => !item.stepId || byId.has(item.stepId));
@@ -18,6 +18,7 @@ export default function Hub71Track({ roadmap, completed, trackDone, teamHref, re
   const doneCount = items.filter(isDone).length;
   return <div className="view-page">
     <div className="view-inner">
+      <button type="button" className="view-back" onClick={onBack}><Icon name="chevron" size={12} style={{ transform: "rotate(180deg)" }} />Back to your plan</button>
       <header className="view-heading"><span className="eyebrow">HUB71 BENEFITS TRACK</span><h1>Unlock Hub71’s full benefits.</h1>
         <p>{doneCount} of {items.length} done. Steps marked on your map are ticked here too.</p></header>
       <div className="sample-banner"><Icon name="spark" size={14} />From Hub71’s onboarding guide, unless marked otherwise. Confirm anything marked illustrative with Hub71.</div>

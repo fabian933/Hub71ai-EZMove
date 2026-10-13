@@ -28,6 +28,8 @@ export const ProfileSchema = z.object({
   budgetAED: z.number().int().positive().max(100_000_000).optional(),
   hasPets: z.boolean(),
   drives: z.boolean(),
+  /** Company name when the person arrived through a founder's team invite. */
+  invitedBy: z.string().trim().min(1).max(60).optional(),
 }).strict();
 
 /** Extra facts that only apply to some move reasons, e.g. Hub71 founders. */

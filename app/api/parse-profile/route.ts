@@ -30,7 +30,7 @@ export async function POST(request: Request) {
   try {
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 20_000, maxRetries: 0 });
     const currentProfile = normaliseProfile(input.data.profile ?? defaultProfile());
-    const { moveMonth: _moveMonth, budgetBand: _budgetBand, ...current } = currentProfile;
+    const { moveMonth: _moveMonth, budgetBand: _budgetBand, invitedBy: _invitedBy, ...current } = currentProfile;
     const response = await client.responses.parse({
       model: process.env.OPENAI_MODEL,
       store: false,

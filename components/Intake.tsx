@@ -48,7 +48,7 @@ function CountrySearch({ value, onChange }: { value: string; onChange: (code: st
 
 export default function Intake({ moveDate, demoMoveDate, invite }: { moveDate: string; demoMoveDate: string; invite?: Invite | null }) {
   const router = useRouter();
-  const [profile, setProfile] = useState<Profile>(() => invite ? { ...defaultProfile(moveDate), reason: "job", household: invite.household, kids: invite.household === "family" ? invite.kids : 0 } : defaultProfile(moveDate));
+  const [profile, setProfile] = useState<Profile>(() => invite ? { ...defaultProfile(moveDate), reason: "job", household: invite.household, kids: invite.household === "family" ? invite.kids : 0, invitedBy: invite.company } : defaultProfile(moveDate));
   const [otherNationality, setOtherNationality] = useState(false);
   const [sentence, setSentence] = useState("");
   const [parsing, setParsing] = useState(false);

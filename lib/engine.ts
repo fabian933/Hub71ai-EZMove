@@ -39,7 +39,9 @@ export function personalise(profile: Profile): Step[] {
       warnings: [...merged.warnings],
       overrides: undefined,
     };
-  });
+  }).map((step) => step.id === "entry_permit" && parsed.invitedBy && parsed.reason !== "hub71_founder"
+    ? { ...step, tips: [...step.tips, "Your company files this through Clara."] }
+    : step);
 }
 
 export function getState(step: Step, completed: CompletedIds = []): StepState {
