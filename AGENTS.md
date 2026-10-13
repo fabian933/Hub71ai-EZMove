@@ -14,7 +14,7 @@ Core insight: relocation steps depend on each other (Emirates ID unlocks bank, l
 Steps sit in two lanes that depend on each other:
 - **Your company**: Hub71 and ADGM steps. Only for Hub71 founders.
 - **You and your family**: visas, Emirates ID, housing, banking, schools, health.
-Cross-lane dependencies are real (e.g. the company's establishment card comes before the founder's visa) and must be modelled, not hidden.
+Cross-lane dependencies are real (e.g. the founder's visa waits for the company's ADGM licence, and the business bank account waits for the founder's Emirates ID) and must be modelled, not hidden.
 
 ## Views
 - The default view is a **card dashboard**: what to do now, what's next, and what's done, per lane.

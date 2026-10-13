@@ -1,10 +1,231 @@
 [
   {
-    "id": "degree_attestation",
-    "title": "Arrange degree attestation",
-    "shortTitle": "Degree attestation",
+    "id": "acceptance_letter",
+    "title": "Sign your Hub71 acceptance letter",
+    "shortTitle": "Acceptance letter",
+    "category": "hub71",
+    "phase": "before",
+    "lane": "company",
+    "prerequisites": [],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "durationLabel": null,
+    "provider": "Hub71",
+    "officialLink": "https://www.hub71.com",
+    "tips": [
+      "Signed by Hub71's CEO and the founder(s).",
+      "Unlocks Hub71 portal access, initially Clara and WeWork only."
+    ],
+    "warnings": [],
+    "source": "hub71_guide",
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "clara_kyc",
+    "title": "Complete KYC on Clara",
+    "shortTitle": "Clara KYC",
+    "category": "hub71",
+    "phase": "before",
+    "lane": "company",
+    "prerequisites": [
+      "acceptance_letter"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "durationLabel": null,
+    "provider": "Clara, via the Hub71 portal",
+    "officialLink": "https://www.hub71.com",
+    "tips": [
+      "Upload your KYC and due diligence documents on Clara."
+    ],
+    "warnings": [],
+    "source": "hub71_guide",
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "adgm_licence",
+    "title": "Get your ADGM licence",
+    "shortTitle": "ADGM licence",
+    "category": "hub71",
+    "phase": "before",
+    "lane": "company",
+    "prerequisites": [
+      "clara_kyc"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "durationLabel": "Usually 30–60 days",
+    "provider": "ADGM, issued via Clara",
+    "officialLink": "https://www.adgm.com",
+    "tips": [
+      "Issued via Clara."
+    ],
+    "warnings": [],
+    "source": "hub71_guide",
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "incentives_agreement",
+    "title": "Sign the Hub71 incentives agreement",
+    "shortTitle": "Incentives agreement",
+    "category": "hub71",
+    "phase": "before",
+    "lane": "company",
+    "prerequisites": [
+      "adgm_licence"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "durationLabel": null,
+    "provider": "Hub71",
+    "officialLink": "https://www.hub71.com",
+    "tips": [
+      "Sign right after your licence is issued.",
+      "Unlocks full portal access to AED 250,000 in services from 30+ approved providers, covering incorporation, housing, health insurance, office space and legal."
+    ],
+    "warnings": [],
+    "source": "hub71_guide",
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "business_bank_account",
+    "title": "Open your business bank account",
+    "shortTitle": "Business bank",
+    "category": "hub71",
+    "phase": "settling",
+    "lane": "company",
+    "prerequisites": [
+      "adgm_licence",
+      "emirates_id"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "durationLabel": null,
+    "provider": "Your chosen bank",
+    "officialLink": null,
+    "tips": [],
+    "warnings": [
+      "Don't start a bank account before your ADGM licence."
+    ],
+    "source": "hub71_guide",
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "company_stitching",
+    "title": "Complete company stitching",
+    "shortTitle": "Company stitching",
+    "category": "hub71",
+    "phase": "settling",
+    "lane": "company",
+    "prerequisites": [
+      "business_bank_account"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "durationLabel": "About 2 weeks",
+    "provider": "ADGM",
+    "officialLink": "https://www.adgm.com",
+    "tips": [
+      "Share transfer from the ADGM operating company to the holding company."
+    ],
+    "warnings": [
+      "Don't start stitching before your bank account is open."
+    ],
+    "source": "hub71_guide",
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "safe_signing",
+    "title": "Sign the Hub71 SAFE",
+    "shortTitle": "SAFE signing",
+    "category": "hub71",
+    "phase": "settling",
+    "lane": "company",
+    "prerequisites": [
+      "company_stitching"
+    ],
+    "appliesIf": {
+      "reasons": [
+        "hub71_founder"
+      ]
+    },
+    "mustDoBeforeFlying": false,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "durationLabel": "Funds 3–4 working days after the share transfer",
+    "provider": "Hub71",
+    "officialLink": "https://www.hub71.com",
+    "tips": [
+      "AED 250,000 SAFE, with no discount and no valuation cap."
+    ],
+    "warnings": [],
+    "source": "hub71_guide",
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "uae_mobile_number",
+    "title": "Get a UAE mobile number",
+    "shortTitle": "UAE number",
     "category": "before_you_fly",
     "phase": "before",
+    "lane": "personal",
     "prerequisites": [],
     "appliesIf": {},
     "mustDoBeforeFlying": true,
@@ -12,9 +233,37 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
+    "provider": "UAE mobile operator",
+    "officialLink": null,
+    "tips": [],
+    "warnings": [
+      "Your visa file uses this number. Changing it later costs a fee."
+    ],
+    "source": "hub71_guide",
+    "sourceUrl": null,
+    "lastVerified": null
+  },
+  {
+    "id": "degree_attestation",
+    "title": "Arrange degree attestation",
+    "shortTitle": "Degree attestation",
+    "category": "before_you_fly",
+    "phase": "before",
+    "lane": "personal",
+    "prerequisites": [],
+    "appliesIf": {},
+    "mustDoBeforeFlying": true,
+    "leadTimeDays": null,
+    "documents": [],
+    "costAED": null,
+    "durationDays": null,
+    "durationLabel": null,
     "provider": "Attestation provider",
     "officialLink": "https://www.mofa.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -24,6 +273,7 @@
     "shortTitle": "Marriage attestation",
     "category": "before_you_fly",
     "phase": "before",
+    "lane": "personal",
     "prerequisites": [],
     "appliesIf": {
       "household": [
@@ -36,9 +286,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Attestation provider",
     "officialLink": "https://www.mofa.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -48,6 +301,7 @@
     "shortTitle": "Birth attestation",
     "category": "before_you_fly",
     "phase": "before",
+    "lane": "personal",
     "prerequisites": [],
     "appliesIf": {
       "minKids": 1
@@ -57,9 +311,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Attestation provider",
     "officialLink": "https://www.mofa.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -69,6 +326,7 @@
     "shortTitle": "School records",
     "category": "before_you_fly",
     "phase": "before",
+    "lane": "personal",
     "prerequisites": [],
     "appliesIf": {
       "minKids": 1
@@ -78,9 +336,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Current school",
     "officialLink": "https://www.adek.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -90,6 +351,7 @@
     "shortTitle": "Medication check",
     "category": "before_you_fly",
     "phase": "before",
+    "lane": "personal",
     "prerequisites": [],
     "appliesIf": {},
     "mustDoBeforeFlying": true,
@@ -97,9 +359,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Relevant health authority",
     "officialLink": "https://mohap.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -109,6 +374,7 @@
     "shortTitle": "Pet import",
     "category": "before_you_fly",
     "phase": "before",
+    "lane": "personal",
     "prerequisites": [],
     "appliesIf": {
       "hasPets": true
@@ -118,9 +384,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Relevant import authority",
     "officialLink": "https://www.moccae.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -130,6 +399,7 @@
     "shortTitle": "Temporary stay",
     "category": "before_you_fly",
     "phase": "before",
+    "lane": "personal",
     "prerequisites": [],
     "appliesIf": {},
     "mustDoBeforeFlying": true,
@@ -137,57 +407,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Accommodation provider",
     "officialLink": null,
     "tips": [],
-    "sourceUrl": null,
-    "lastVerified": null
-  },
-  {
-    "id": "hub71_acceptance",
-    "title": "Confirm Hub71 acceptance",
-    "shortTitle": "Hub71 acceptance",
-    "category": "hub71",
-    "phase": "before",
-    "prerequisites": [],
-    "appliesIf": {
-      "reasons": [
-        "hub71_founder"
-      ]
-    },
-    "mustDoBeforeFlying": false,
-    "leadTimeDays": null,
-    "documents": [],
-    "costAED": null,
-    "durationDays": null,
-    "provider": "Hub71",
-    "officialLink": "https://www.hub71.com",
-    "tips": [],
-    "sourceUrl": null,
-    "lastVerified": null
-  },
-  {
-    "id": "company_licence",
-    "title": "Arrange company licence",
-    "shortTitle": "Company licence",
-    "category": "hub71",
-    "phase": "before",
-    "prerequisites": [
-      "hub71_acceptance"
-    ],
-    "appliesIf": {
-      "reasons": [
-        "hub71_founder"
-      ]
-    },
-    "mustDoBeforeFlying": false,
-    "leadTimeDays": null,
-    "documents": [],
-    "costAED": null,
-    "durationDays": null,
-    "provider": "Company licensing authority",
-    "officialLink": "https://www.adgm.com",
-    "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -197,8 +422,9 @@
     "shortTitle": "Establishment card",
     "category": "hub71",
     "phase": "before",
+    "lane": "company",
     "prerequisites": [
-      "company_licence"
+      "adgm_licence"
     ],
     "appliesIf": {
       "reasons": [
@@ -210,34 +436,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
-    "provider": "Relevant immigration authority",
+    "durationLabel": null,
+    "provider": "ADGM",
     "officialLink": "https://www.adgm.com",
     "tips": [],
-    "sourceUrl": null,
-    "lastVerified": null
-  },
-  {
-    "id": "founder_visa",
-    "title": "Arrange founder visa",
-    "shortTitle": "Founder visa",
-    "category": "hub71",
-    "phase": "before",
-    "prerequisites": [
-      "establishment_card"
-    ],
-    "appliesIf": {
-      "reasons": [
-        "hub71_founder"
-      ]
-    },
-    "mustDoBeforeFlying": false,
-    "leadTimeDays": null,
-    "documents": [],
-    "costAED": null,
-    "durationDays": null,
-    "provider": "Visa sponsor",
-    "officialLink": null,
-    "tips": [],
+    "warnings": [],
+    "source": "official",
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -247,9 +451,10 @@
     "shortTitle": "Entry permit",
     "category": "visa",
     "phase": "before",
+    "lane": "personal",
     "prerequisites": [
-      "founder_visa",
-      "degree_attestation"
+      "degree_attestation",
+      "adgm_licence"
     ],
     "appliesIf": {},
     "mustDoBeforeFlying": false,
@@ -257,34 +462,32 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Visa sponsor",
     "officialLink": "https://icp.gov.ae",
     "tips": [],
-    "sourceUrl": null,
-    "lastVerified": null
-  },
-  {
-    "id": "hub71_incentives",
-    "title": "Confirm Hub71 incentives",
-    "shortTitle": "Hub71 incentives",
-    "category": "hub71",
-    "phase": "settling",
-    "prerequisites": [
-      "hub71_acceptance"
+    "warnings": [],
+    "source": null,
+    "overrides": [
+      {
+        "reasons": [
+          "hub71_founder"
+        ],
+        "addPrerequisites": [
+          "uae_mobile_number"
+        ],
+        "provider": "Filed through Clara",
+        "source": "hub71_guide",
+        "documents": [
+          "Passport copy",
+          "Photo on a white background",
+          "UAE mobile number",
+          "Offer letter or employment contract signed by both sides (even for the CEO)",
+          "Gross monthly salary",
+          "Job title from ADGM's standard list"
+        ]
+      }
     ],
-    "appliesIf": {
-      "reasons": [
-        "hub71_founder"
-      ]
-    },
-    "mustDoBeforeFlying": false,
-    "leadTimeDays": null,
-    "documents": [],
-    "costAED": null,
-    "durationDays": null,
-    "provider": "Hub71",
-    "officialLink": "https://www.hub71.com",
-    "tips": [],
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -294,6 +497,7 @@
     "shortTitle": "Arrive",
     "category": "visa",
     "phase": "landing",
+    "lane": "personal",
     "prerequisites": [
       "entry_permit",
       "medication_check",
@@ -306,9 +510,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Self",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -318,6 +525,7 @@
     "shortTitle": "Medical fitness",
     "category": "health",
     "phase": "landing",
+    "lane": "personal",
     "prerequisites": [
       "arrive"
     ],
@@ -331,9 +539,12 @@
     ],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Medical fitness centre",
     "officialLink": "https://www.seha.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -343,6 +554,7 @@
     "shortTitle": "Biometrics",
     "category": "identity",
     "phase": "landing",
+    "lane": "personal",
     "prerequisites": [
       "medical_fitness"
     ],
@@ -357,9 +569,12 @@
     ],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Identity authority",
     "officialLink": "https://icp.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -369,6 +584,7 @@
     "shortTitle": "Emirates ID",
     "category": "identity",
     "phase": "landing",
+    "lane": "personal",
     "prerequisites": [
       "biometrics"
     ],
@@ -383,9 +599,12 @@
     ],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Identity authority",
     "officialLink": "https://icp.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -395,6 +614,7 @@
     "shortTitle": "Bank account",
     "category": "money",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "emirates_id"
     ],
@@ -408,9 +628,12 @@
     ],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Chosen bank",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -420,6 +643,7 @@
     "shortTitle": "Mobile plan",
     "category": "life",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "emirates_id"
     ],
@@ -429,9 +653,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Chosen mobile provider",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -441,6 +668,7 @@
     "shortTitle": "UAE Pass",
     "category": "identity",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "emirates_id"
     ],
@@ -450,9 +678,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "UAE Pass",
     "officialLink": "https://uaepass.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -462,6 +693,7 @@
     "shortTitle": "Sign lease",
     "category": "housing",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "emirates_id",
       "rent_cheques"
@@ -476,9 +708,12 @@
     ],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Landlord or property agent",
     "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -488,6 +723,7 @@
     "shortTitle": "Health insurance",
     "category": "health",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "emirates_id"
     ],
@@ -497,9 +733,23 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Health insurer",
     "officialLink": "https://www.doh.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
+    "overrides": [
+      {
+        "reasons": [
+          "hub71_founder"
+        ],
+        "addTips": [
+          "Covered by Hub71 through ADNIC."
+        ],
+        "source": "hub71_guide"
+      }
+    ],
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -509,6 +759,7 @@
     "shortTitle": "TAMM account",
     "category": "identity",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "uae_pass"
     ],
@@ -518,9 +769,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "TAMM",
     "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -530,6 +784,7 @@
     "shortTitle": "Salary transfer",
     "category": "money",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "bank_account"
     ],
@@ -539,9 +794,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Employer and bank",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -551,6 +809,7 @@
     "shortTitle": "Rent cheques",
     "category": "money",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "bank_account"
     ],
@@ -560,9 +819,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Chosen bank",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -572,6 +834,7 @@
     "shortTitle": "Tawtheeq",
     "category": "housing",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "lease_signing"
     ],
@@ -584,9 +847,12 @@
     ],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Tenancy registration authority",
     "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -596,6 +862,7 @@
     "shortTitle": "Home utilities",
     "category": "housing",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "tawtheeq"
     ],
@@ -605,9 +872,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "TAQA",
     "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -617,6 +887,7 @@
     "shortTitle": "Home internet",
     "category": "housing",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "tawtheeq"
     ],
@@ -626,9 +897,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Chosen internet provider",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -638,6 +912,7 @@
     "shortTitle": "Family visa",
     "category": "family",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "tawtheeq",
       "marriage_cert_attestation"
@@ -659,9 +934,14 @@
     ],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Visa sponsor",
     "officialLink": "https://icp.gov.ae",
     "tips": [],
+    "warnings": [
+      "To sponsor a spouse and children you need a salary of at least AED 5,000 a month (AED 10,000 to sponsor a parent)."
+    ],
+    "source": "hub71_guide",
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -671,6 +951,7 @@
     "shortTitle": "Dependant Emirates ID",
     "category": "family",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "family_visa"
     ],
@@ -685,9 +966,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Identity authority",
     "officialLink": "https://icp.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -697,6 +981,7 @@
     "shortTitle": "School enrolment",
     "category": "family",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "dependant_emirates_id",
       "school_records",
@@ -716,9 +1001,12 @@
     ],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Chosen school",
     "officialLink": "https://www.adek.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -728,6 +1016,7 @@
     "shortTitle": "Driving licence",
     "category": "transport",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "emirates_id"
     ],
@@ -739,9 +1028,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Driving licensing authority",
     "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -751,6 +1043,7 @@
     "shortTitle": "Car registration",
     "category": "transport",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "licence_conversion",
       "tamm_account"
@@ -763,9 +1056,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Vehicle registration authority",
     "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -775,6 +1071,7 @@
     "shortTitle": "Darb toll",
     "category": "transport",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "car_registration"
     ],
@@ -786,9 +1083,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Darb",
     "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -798,6 +1098,7 @@
     "shortTitle": "Mawaqif parking",
     "category": "transport",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "car_registration"
     ],
@@ -809,9 +1110,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Mawaqif",
     "officialLink": "https://www.tamm.abudhabi",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -821,6 +1125,7 @@
     "shortTitle": "Golden Visa check",
     "category": "visa",
     "phase": "living",
+    "lane": "personal",
     "prerequisites": [
       "emirates_id"
     ],
@@ -830,9 +1135,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Relevant immigration authority",
     "officialLink": "https://icp.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -842,6 +1150,7 @@
     "shortTitle": "Join community",
     "category": "life",
     "phase": "living",
+    "lane": "personal",
     "prerequisites": [
       "arrive"
     ],
@@ -851,9 +1160,23 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Chosen community",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
+    "overrides": [
+      {
+        "reasons": [
+          "hub71_founder"
+        ],
+        "addTips": [
+          "Join the Hub71 founders WhatsApp group once onboarded."
+        ],
+        "source": "hub71_guide"
+      }
+    ],
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -863,6 +1186,7 @@
     "shortTitle": "Things to do",
     "category": "life",
     "phase": "living",
+    "lane": "personal",
     "prerequisites": [
       "arrive"
     ],
@@ -872,9 +1196,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Visit Abu Dhabi",
     "officialLink": "https://visitabudhabi.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -884,6 +1211,7 @@
     "shortTitle": "Find doctor",
     "category": "health",
     "phase": "living",
+    "lane": "personal",
     "prerequisites": [
       "health_insurance_card"
     ],
@@ -893,9 +1221,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Department of Health Abu Dhabi",
     "officialLink": "https://www.doh.gov.ae",
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -905,6 +1236,7 @@
     "shortTitle": "Credit history",
     "category": "money",
     "phase": "living",
+    "lane": "personal",
     "prerequisites": [
       "bank_account"
     ],
@@ -914,9 +1246,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Al Etihad Credit Bureau",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   },
@@ -926,6 +1261,7 @@
     "shortTitle": "Settled",
     "category": "life",
     "phase": "settling",
+    "lane": "personal",
     "prerequisites": [
       "utilities_taqa",
       "bank_account",
@@ -938,9 +1274,12 @@
     "documents": [],
     "costAED": null,
     "durationDays": null,
+    "durationLabel": null,
     "provider": "Self",
     "officialLink": null,
     "tips": [],
+    "warnings": [],
+    "source": null,
     "sourceUrl": null,
     "lastVerified": null
   }

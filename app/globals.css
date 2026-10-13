@@ -197,6 +197,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .drawer-metrics { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #e0e6d8; padding: 19px 0; gap: 20px; }
 .drawer-metrics p { font-size: 11px; color: #87977b; margin: 0; }
 .external-link { display: inline-flex; align-items: center; gap: 8px; color: #567e45; font-size: 11px; margin-top: 6px; }
+.source-badge { display: inline-flex; align-items: center; gap: 6px; margin: -12px 0 18px; font-size: 10px; color: #7b8c72; }
+.source-badge.guide { padding: 4px 9px; border-radius: 20px; background: #e3eefa; color: #2f557c; border: 1px solid #c4d8ee; }
+.guide-tag { display: inline-flex; padding: 2px 7px; border-radius: 20px; border: 1px solid #5a7aa0; color: #b9d0ec; font-size: 9px; }
+.warning-panel { display: grid; gap: 6px; margin: 0 0 20px; padding: 12px 14px; border-radius: 10px; background: #f8e5bd; border: 1px solid #e9c27a; }
+.warning-panel p { margin: 0; font-size: 11px; line-height: 1.5; color: #6b4a10; font-weight: 600; }
 .check-link { display: inline-flex; align-items: center; gap: 5px; color: #567e45; font-size: 11px; text-decoration: underline; text-underline-offset: 2px; }
 .source-link { display: inline-block; margin: 7px 0 0 13px; font-size: 9px; color: #8a9c7a; text-decoration: underline; }
 .drawer-action { position: sticky; bottom: -27px; padding: 5px 0 20px; background: #f7f9f1; margin-top: 5px; }

@@ -17,13 +17,29 @@ export function personalise(profile: Profile): Step[] {
     (rule.drives === undefined || parsed.drives === rule.drives),
   );
   const ids = new Set(selected.map((step) => step.id));
-  return selected.map((step) => ({
-    ...step,
-    prerequisites: step.prerequisites.filter((id) => ids.has(id)),
-    appliesIf: { ...step.appliesIf },
-    documents: [...step.documents],
-    tips: [...step.tips],
-  }));
+  return selected.map((step) => {
+    const overrides = (step.overrides ?? []).filter((override) => override.reasons.includes(parsed.reason));
+    const merged = overrides.reduce((current, override) => ({
+      ...current,
+      prerequisites: [...current.prerequisites, ...(override.addPrerequisites ?? [])],
+      documents: override.documents ?? current.documents,
+      tips: [...current.tips, ...(override.addTips ?? [])],
+      warnings: [...current.warnings, ...(override.addWarnings ?? [])],
+      provider: override.provider ?? current.provider,
+      source: override.source ?? current.source,
+    }), { ...step });
+    return {
+      ...merged,
+      // Steps that don't apply to this person drop out of the prerequisites,
+      // e.g. the visa only waits for the ADGM licence when there is a company lane.
+      prerequisites: [...new Set(merged.prerequisites)].filter((id) => ids.has(id)),
+      appliesIf: { ...step.appliesIf },
+      documents: [...merged.documents],
+      tips: [...merged.tips],
+      warnings: [...merged.warnings],
+      overrides: undefined,
+    };
+  });
 }
 
 export function getState(step: Step, completed: CompletedIds = []): StepState {

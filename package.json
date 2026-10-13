@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "start": "next start"
+    "start": "next start",
+    "check:graph": "node scripts/check-graph.mjs"
   },
   "repository": {
     "type": "git",

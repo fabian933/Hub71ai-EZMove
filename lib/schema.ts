@@ -30,12 +30,25 @@ export const ProfileSchema = z.object({
   drives: z.boolean(),
 }).strict();
 
+/** Extra facts that only apply to some move reasons, e.g. Hub71 founders. */
+const StepOverrideSchema = z.object({
+  reasons: z.array(reason).min(1),
+  addPrerequisites: z.array(id).optional(),
+  documents: z.array(text).optional(),
+  addTips: z.array(text).optional(),
+  addWarnings: z.array(text).optional(),
+  provider: text.optional(),
+  source: z.enum(["hub71_guide", "official"]).optional(),
+}).strict();
+
 export const StepSchema = z.object({
   id,
   title: text,
   shortTitle: text.refine((value) => value.split(/\s+/).length <= 3, "Use at most three words"),
   category: z.enum(["before_you_fly", "identity", "visa", "housing", "money", "family", "health", "transport", "hub71", "life"]),
   phase: z.enum(["before", "landing", "settling", "living"]),
+  /** "company" steps are Hub71/ADGM steps and only apply to Hub71 founders. */
+  lane: z.enum(["company", "personal"]),
   prerequisites: z.array(id),
   appliesIf: z.object({
     household: z.array(household).min(1).optional(),
@@ -49,9 +62,15 @@ export const StepSchema = z.object({
   documents: z.array(text),
   costAED: range.nullable(),
   durationDays: range.nullable(),
+  /** Plain-language timing from a source, e.g. "Usually 30–60 days". */
+  durationLabel: text.nullable(),
   provider: text,
   officialLink: link,
   tips: z.array(text),
+  warnings: z.array(text),
+  /** Where the step's facts come from. hub71_guide = Hub71's 2026 onboarding guide. */
+  source: z.enum(["hub71_guide", "official"]).nullable(),
+  overrides: z.array(StepOverrideSchema).optional(),
   ...provenance,
 }).strict();
 
