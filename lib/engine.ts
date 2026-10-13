@@ -114,6 +114,17 @@ export function doByDates(profile: Profile, roadmap: readonly Step[] = personali
     .map((step) => [step.id, getDoByDate(step, moveDateOf(profile))!]));
 }
 
+const phaseOrder: Record<Step["phase"], number> = { before: 0, landing: 1, settling: 2, living: 3 };
+/** Available steps, earliest do-by date first, then by phase and roadmap order. */
+export function nextUpSteps(roadmap: readonly Step[], completed: CompletedIds, moveDate: string, count = 3): { step: Step; doBy: string | null }[] {
+  return roadmap.filter((step) => getState(step, completed) === "available")
+    .map((step, index) => ({ step, index, doBy: getDoByDate(step, moveDate) }))
+    .sort((a, b) => (a.doBy && b.doBy ? a.doBy.localeCompare(b.doBy) : a.doBy ? -1 : b.doBy ? 1 : 0)
+      || phaseOrder[a.step.phase] - phaseOrder[b.step.phase] || a.index - b.index)
+    .slice(0, count)
+    .map(({ step, doBy }) => ({ step, doBy }));
+}
+
 export const COMPLETED_STORAGE_KEY = "ezmove.completed.v1";
 export type ProgressStorage = Pick<Storage, "getItem" | "setItem">;
 function browserStorage(): ProgressStorage | undefined {

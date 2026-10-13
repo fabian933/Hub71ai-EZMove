@@ -1,0 +1,7 @@
+{
+  "groups": [
+    { "id": "founders_breakfast", "name": "Founders' breakfast", "summary": "Monthly breakfast for founders who moved in the last year.", "goodFor": ["founders"], "illustrative": true },
+    { "id": "new_parents_reem", "name": "New-in-town parents", "summary": "Weekend meet-ups for families settling in with young children.", "goodFor": ["families"], "illustrative": true },
+    { "id": "run_club_corniche", "name": "Corniche run club", "summary": "Early-morning runs, all paces welcome.", "goodFor": ["everyone"], "illustrative": true }
+  ]
+}

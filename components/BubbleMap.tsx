@@ -2,17 +2,21 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { criticalPath, daysBetween, deadlineTone, downstreamUnlockCounts, getDoByDate, getState, loadCompletedIds, moveDateOf, personalise, saveCompletedIds, todayISO, type DeadlineTone } from "@/lib/engine";
+import { criticalPath, daysBetween, deadlineTone, downstreamUnlockCounts, getDoByDate, getState, loadCompletedIds, moveDateOf, nextUpSteps, personalise, saveCompletedIds, todayISO, type DeadlineTone } from "@/lib/engine";
 import { categoryStyles, descendants, layoutMap, settlementSteps, type MapNode } from "@/lib/map";
 import { countryName } from "@/lib/profile";
 import { loadChosenArea, saveChosenArea } from "@/lib/areas";
 import type { Profile, Step } from "@/lib/schema";
 import Icon from "./Icon";
 import NodeDrawer from "./NodeDrawer";
+import LivingHere from "./LivingHere";
+import Hub71Track from "./Hub71Track";
+import { hub71Track, loadTrackDone, saveTrackDone } from "@/lib/hub71";
+import { encodeProfile } from "@/lib/profile";
 
 type View = { x: number; y: number; scale: number };
 type PhaseFilter = Step["phase"] | "all";
-const phases: { value: PhaseFilter; label: string }[] = [{ value: "all", label: "All" }, { value: "before", label: "Before you arrive" }, { value: "landing", label: "Landed" }, { value: "settling", label: "Settling" }, { value: "living", label: "Living" }];
+const phases: { value: PhaseFilter; label: string }[] = [{ value: "all", label: "All" }, { value: "before", label: "Before you arrive" }, { value: "landing", label: "Landed" }, { value: "settling", label: "Settling" }];
 const badgeColors: Record<DeadlineTone, { fill: string; text: string }> = {
   upcoming: { fill: "#e5d3b1", text: "#3b3529" },
   soon: { fill: "#f1b955", text: "#3d2c0b" },
@@ -26,7 +30,6 @@ function countdown(days: number) {
   if (days === 0) return "Moving today";
   return `${-days} ${days === -1 ? "day" : "days"} ago`;
 }
-const phaseOrder: Record<Step["phase"], number> = { before: 0, landing: 1, settling: 2, living: 3 };
 const SIGNED_IN_KEY = "ezmove.uaepass.v1";
 function loadSignedIn(): string[] {
   try { const parsed: unknown = JSON.parse(window.localStorage.getItem(SIGNED_IN_KEY) ?? "[]"); return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === "string") : []; }
@@ -57,10 +60,18 @@ function fittedView(nodes: readonly MapNode[], viewport: { width: number; height
   return { x: viewport.width / 2 - (minX + maxX) / 2 * scale, y: viewport.height / 2 - (minY + maxY) / 2 * scale, scale };
 }
 
-export default function BubbleMap({ profile }: { profile: Profile }) {
+type Tab = "settling" | "living" | "hub71";
+/** A read-only look at a hire's map, opened from the team page. Nothing is saved. */
+export type HireViewer = { name: string; completed: string[]; backHref: string };
+
+export default function BubbleMap({ profile, viewer }: { profile: Profile; viewer?: HireViewer }) {
   const reducedMotion = useReducedMotion();
   const roadmap = useMemo(() => personalise(profile), [profile]);
-  const layout = useMemo(() => layoutMap(roadmap), [roadmap]);
+  const mapRoadmap = useMemo(() => roadmap.filter((step) => step.phase !== "living"), [roadmap]);
+  const layout = useMemo(() => layoutMap(mapRoadmap), [mapRoadmap]);
+  const isFounder = profile.reason === "hub71_founder";
+  const [tab, setTab] = useState<Tab>("settling");
+  const [trackDone, setTrackDone] = useState<Set<string>>(new Set());
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [loaded, setLoaded] = useState(false);
   const [phase, setPhase] = useState<PhaseFilter>("all");
@@ -105,16 +116,23 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   const hoverStep = roadmap.find((step) => step.id === hovered);
   const hoverUnlocks = [...downstream].filter((id) => !completed.has(id)).map((id) => roadmap.find((step) => step.id === id)?.shortTitle);
   const closeDrawer = useCallback(() => setSelected(null), []);
-  const categories = [...new Set(roadmap.map((step) => step.category))];
+  const categories = [...new Set(mapRoadmap.map((step) => step.category))];
+  const trackItems = hub71Track.filter((item) => !item.stepId || roadmap.some((step) => step.id === item.stepId));
+  const trackSummary = { done: trackItems.filter((item) => item.stepId ? completed.has(item.stepId) : trackDone.has(item.id)).length, total: trackItems.length };
+  const teamHref = `/team?p=${encodeProfile(profile)}`;
+  const persist = (ids: Set<string>) => viewer ? true : saveCompletedIds(ids);
   const moveDate = moveDateOf(profile);
-  const nextUp = roadmap.filter((step) => getState(step, completed) === "available")
-    .map((step, index) => ({ step, index, doBy: getDoByDate(step, moveDate) }))
-    .sort((a, b) => (a.doBy && b.doBy ? a.doBy.localeCompare(b.doBy) : a.doBy ? -1 : b.doBy ? 1 : 0)
-      || phaseOrder[a.step.phase] - phaseOrder[b.step.phase] || a.index - b.index)
-    .slice(0, 3);
+  const nextUp = nextUpSteps(roadmap.filter((step) => step.phase !== "living"), completed, moveDate);
   const daysToMove = today ? daysBetween(today, moveDate) : null;
 
-  useEffect(() => { setCompleted(loadCompletedIds()); setChosenArea(loadChosenArea()); setToday(todayISO()); setSignedIn(loadSignedIn()); setLoaded(true); }, []);
+  useEffect(() => {
+    setCompleted(viewer ? new Set(viewer.completed.filter((id) => roadmap.some((step) => step.id === id))) : loadCompletedIds());
+    setChosenArea(loadChosenArea()); setToday(todayISO());
+    if (!viewer) { setSignedIn(loadSignedIn()); setTrackDone(loadTrackDone()); }
+    setLoaded(true);
+  // Loaded once per visit; the viewer and roadmap come from the URL.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     if (!stage.current) return;
     const observer = new ResizeObserver(([entry]) => {
@@ -214,7 +232,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
     const settled = roadmap.find((item) => item.id === "settled")!;
     if (id !== "settled" && getState(settled, next) === "available") next.add("settled");
     setCompleted(next); setNewlyUnlocked(new Set(lightingUp.map((item) => item.id)));
-    setStorageWarning(!saveCompletedIds(next));
+    setStorageWarning(!persist(next));
     setSelected(null); setHovered(null);
     setAnnouncement(next.has("settled") && !completed.has("settled") ? "You’re settled. Welcome to Abu Dhabi." : `${step.shortTitle} complete. ${lightingUp.length ? `${lightingUp.length} new ${lightingUp.length === 1 ? "step is" : "steps are"} ready.` : "Progress saved."}`);
     if (flashTimer.current) clearTimeout(flashTimer.current);
@@ -261,7 +279,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
       next.add(step.id);
       added.push(step.id);
       setCompleted(next);
-      setStorageWarning(!saveCompletedIds(next));
+      setStorageWarning(!persist(next));
       const lightingUp = roadmap.filter((item) => getState(item, previous) === "locked" && getState(item, next) === "available");
       setNewlyUnlocked(new Set([step.id, ...lightingUp.map((item) => item.id)]));
       if (!reducedMotion) await new Promise((resolve) => setTimeout(resolve, 140));
@@ -276,7 +294,7 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   function signOut() {
     const removed = new Set(signedIn);
     const next = pruneCompleted(roadmap, new Set([...completed].filter((id) => !removed.has(id))));
-    setCompleted(next); setStorageWarning(!saveCompletedIds(next));
+    setCompleted(next); setStorageWarning(!persist(next));
     setSignedIn([]); saveSignedIn([]);
     setNewlyUnlocked(new Set()); setSelected(null);
     setAnnouncement("Signed out of UAE Pass. Steps marked by sign-in are cleared.");
@@ -284,24 +302,38 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
   function resetProgress() {
     if (!window.confirm("Clear all completed steps on this device?")) return;
     const next = new Set<string>();
-    setCompleted(next); setStorageWarning(!saveCompletedIds(next));
+    setCompleted(next); setStorageWarning(!persist(next));
     setSignedIn([]); saveSignedIn([]);
     setNewlyUnlocked(new Set()); setSelected(null);
     setAnnouncement("Progress reset.");
   }
+  function toggleTrack(id: string) {
+    if (viewer) return;
+    const next = new Set(trackDone);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setTrackDone(next); setStorageWarning(!saveTrackDone(next));
+  }
+  function openTab(next: Tab) { setTab(next); setHovered(null); setSelected(null); }
   async function shareMap() {
     try { await navigator.clipboard.writeText(window.location.href); setCopied(true); }
     catch { setAnnouncement("Copy the address in your browser to share this map."); }
   }
   function isDimmed(id: string) { return (hovered && id !== hovered && !downstream.has(id)) || (showCritical && !criticalIds.has(id)); }
   return <main className="map-page">
-    <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>Your Abu Dhabi roadmap</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}</span><span className="move-countdown">Moving {formatDate(moveDate)}{daysToMove !== null && ` · ${countdown(daysToMove)}`}</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions">{signedIn.length ? <button className="uae-pass-button signed-in" disabled={demoRunning} onClick={signOut}>Signed in · Sign out</button> : <button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button>}<Link href="/" className="edit-profile">Edit profile</Link><button type="button" className="edit-profile reset-progress" disabled={demoRunning || !completed.size} onClick={resetProgress}>Reset progress</button><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></div></header>
+    <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>{viewer ? `${viewer.name}’s roadmap` : "Your Abu Dhabi roadmap"}</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}</span><span className="move-countdown">Moving {formatDate(moveDate)}{daysToMove !== null && ` · ${countdown(daysToMove)}`}</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions">{viewer ? <><span className="sample-tag on-dark">Sample progress</span><Link href={viewer.backHref} className="share-button">Back to team</Link></> : <>{signedIn.length ? <button className="uae-pass-button signed-in" disabled={demoRunning} onClick={signOut}>Signed in · Sign out</button> : <button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button>}{isFounder && <Link href={teamHref} className="edit-profile team-link">Team</Link>}<Link href="/" className="edit-profile">Edit profile</Link><button type="button" className="edit-profile reset-progress" disabled={demoRunning || !completed.size} onClick={resetProgress}>Reset progress</button><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></>}</div></header>
+    <nav className="view-tabs" aria-label="Your move">
+      <button type="button" className={tab === "settling" ? "active" : ""} aria-pressed={tab === "settling"} onClick={() => openTab("settling")}><small>1</small>Settling in</button>
+      <button type="button" className={tab === "living" ? "active" : ""} aria-pressed={tab === "living"} onClick={() => openTab("living")}><small>2</small>Living here</button>
+      {isFounder && <button type="button" className={tab === "hub71" ? "active" : ""} aria-pressed={tab === "hub71"} onClick={() => openTab("hub71")}>Hub71 track<em>{trackSummary.done}/{trackSummary.total}</em></button>}
+    </nav>
+    <div className="settle-view" style={tab === "settling" ? undefined : { display: "none" }}>
     <div className="map-toolbar"><div className="phase-filters" aria-label="Filter by phase">{phases.map((item) => <button key={item.value} className={phase === item.value ? "active" : ""} aria-pressed={phase === item.value} onClick={() => { setPhase(item.value); setHovered(null); }}>{item.label}</button>)}</div><div className="toolbar-right"><button className={`critical-toggle ${showCritical ? "active" : ""}`} aria-pressed={showCritical} onClick={() => setShowCritical(!showCritical)}><Icon name="spark" size={14} />Critical path</button><div className="settlement-progress"><div><span>{completed.has("settled") ? "Settled" : "To settled"}</span><b>{progress}%</b></div><div className="progress-track" role="progressbar" aria-label="Progress to settled" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress}><motion.div animate={{ width: `${progress}%` }} transition={{ duration: reducedMotion ? 0 : 0.6 }} /></div></div></div></div>
     {nextUp.length > 0 && <nav className="next-up" aria-label="Next up"><span>Next up</span>{nextUp.map(({ step, doBy }) => {
       const tone = doBy && today ? deadlineTone(doBy, today) : null;
       return <button type="button" key={step.id} onClick={() => setSelected(step.id)}><i style={{ background: categoryStyles[step.category].color }} />{step.shortTitle}{doBy && <small className={tone ?? ""}>{tone === "overdue" ? "Overdue" : `by ${new Date(`${doBy}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" })}`}</small>}</button>;
     })}</nav>}
     <div className="map-stage" ref={stage}>
+      {completed.has("settled") && <button type="button" className="settled-nudge" onClick={() => openTab("living")}><Icon name="check" size={14} />You’re settled. Next: Living here <Icon name="chevron" size={13} /></button>}
       <div className="map-caption"><span className="eyebrow">YOUR MOVE, CONNECTED</span><h1>{phase === "all" ? "One step opens the next." : phases.find((item) => item.value === phase)?.label}</h1><p>{showCritical ? "Your longest remaining route to settled." : "Tap a bubble to see what comes next."}</p></div>
       <svg ref={svg} className="bubble-svg" width="100%" height="100%" viewBox={`0 0 ${size.width} ${size.height}`} role="group" aria-label="Interactive relocation map. Drag to pan, pinch or scroll to zoom. Use Tab to focus steps and Enter to open details." tabIndex={0} onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={pointerUp} onKeyDown={(event) => {
         if (event.target !== event.currentTarget) return;
@@ -347,6 +379,9 @@ export default function BubbleMap({ profile }: { profile: Profile }) {
       <AnimatePresence>{announcement && <motion.div key={announcement} className="map-toast" role="status" initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }}><Icon name="check" size={16} /><span>{announcement}</span><button aria-label="Dismiss message" onClick={() => setAnnouncement("")}><Icon name="close" size={13} /></button></motion.div>}</AnimatePresence>
     </div>
     <footer className="map-legend"><div className="category-legend">{categories.map((category) => <span key={category}><i style={{ background: categoryStyles[category].color }} />{categoryStyles[category].label}</span>)}</div><div className="state-legend"><span><i className="legend-done" />Done</span><span><i className="legend-ready" />Available</span><span><Icon name="lock" size={11} />Locked</span></div></footer>
+    </div>
+    {tab === "living" && <LivingHere roadmap={roadmap} completed={completed} chosenArea={chosenArea} isFounder={isFounder} trackSummary={trackSummary} onSelect={setSelected} onOpenTrack={() => openTab("hub71")} />}
+    {tab === "hub71" && isFounder && <Hub71Track roadmap={roadmap} completed={completed} trackDone={trackDone} teamHref={teamHref} readOnly={!!viewer} onDone={markDone} onToggle={toggleTrack} onSelect={setSelected} />}
     {storageWarning && <div className="storage-warning" role="status">Progress is kept for this visit. Browser storage is unavailable.</div>}
     {!loaded && <span className="sr-only">Loading saved progress</span>}
     <AnimatePresence>{selectedStep && <NodeDrawer key="step-drawer" step={selectedStep} roadmap={roadmap} profile={profile} today={today} completed={completed} chosenArea={chosenArea} onChooseArea={chooseArea} onClose={closeDrawer} onDone={markDone} onSelect={setSelected} />}</AnimatePresence>

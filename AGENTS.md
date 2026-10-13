@@ -20,6 +20,9 @@ Cross-lane dependencies are real (e.g. the company's establishment card comes be
 - The default view is a **card dashboard**: what to do now, what's next, and what's done, per lane.
 - The bubble map stays as a secondary view called **"See how it connects"**.
 
+## Team flow
+A founder invites hires, each hire gets their own plan, and the founder sees their progress (sample data until there is a backend).
+
 ## Users
 - Hub71 founders, solo or with family
 - The hires they relocate, solo or with family
