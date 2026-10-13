@@ -70,7 +70,7 @@ export default function NodeDrawer({ step, roadmap, profile, today, completed, c
       {!!step.tips.length && <section className="drawer-section"><h3>Good to know</h3><ul>{step.tips.map((tip) => <li key={tip}>{tip}</li>)}</ul></section>}
       {step.id === "lease_signing" && <AreaSelection profile={profile} chosenArea={chosenArea} onChooseArea={onChooseArea} />}
       {step.id === "school_enrolment" && <SchoolSelection chosenArea={chosenArea} onSelect={onSelect} />}
-      <div className="drawer-action"><button className="build-button" disabled={state !== "available"} onClick={() => onDone(step.id)}>{state === "done" ? "Completed" : state === "locked" ? "Complete earlier steps first" : "Mark done"}<Icon name={state === "locked" ? "lock" : "check"} /></button>{state === "available" && <p>Your next steps will light up on the map.</p>}</div>
+      <div className="drawer-action"><button className="build-button" disabled={state !== "available"} onClick={() => onDone(step.id)}>{state === "done" ? "Completed" : state === "locked" ? "Complete earlier steps first" : "Mark done"}<Icon name={state === "locked" ? "lock" : "check"} /></button>{state === "available" && <p>Your next steps will open up in your plan.</p>}</div>
     </motion.aside>
   </>;
 }

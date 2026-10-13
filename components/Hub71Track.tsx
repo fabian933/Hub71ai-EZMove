@@ -20,7 +20,7 @@ export default function Hub71Track({ roadmap, completed, trackDone, teamHref, re
     <div className="view-inner">
       <button type="button" className="view-back" onClick={onBack}><Icon name="chevron" size={12} style={{ transform: "rotate(180deg)" }} />Back to your plan</button>
       <header className="view-heading"><span className="eyebrow">HUB71 BENEFITS TRACK</span><h1>Unlock Hub71’s full benefits.</h1>
-        <p>{doneCount} of {items.length} done. Steps marked on your map are ticked here too.</p></header>
+        <p>{doneCount} of {items.length} done. Steps you mark done in your plan are ticked here too.</p></header>
       <div className="sample-banner"><Icon name="spark" size={14} />From Hub71’s onboarding guide, unless marked otherwise. Confirm anything marked illustrative with Hub71.</div>
       <ol className="track-list">{items.map((item, index) => {
         const step = item.stepId ? byId.get(item.stepId)! : null;

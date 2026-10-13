@@ -2,6 +2,7 @@
 import { getState } from "@/lib/engine";
 import { cardStatus, laneSteps, laneTitles, nextUpCards, type Lane } from "@/lib/dashboard";
 import type { Step } from "@/lib/schema";
+import Link from "next/link";
 import Icon from "./Icon";
 
 function StepCard({ step, roadmap, completed, moveDate, today, onSelect }: {
@@ -33,9 +34,9 @@ function LaneColumn({ lane, roadmap, completed, moveDate, today, onSelect, onOpe
   </section>;
 }
 
-export default function Dashboard({ roadmap, completed, moveDate, today, isFounder, onSelect, onOpenTrack }: {
-  roadmap: readonly Step[]; completed: ReadonlySet<string>; moveDate: string; today: string | null; isFounder: boolean;
-  onSelect: (id: string) => void; onOpenTrack: () => void;
+export default function Dashboard({ roadmap, completed, moveDate, today, isFounder, readOnly, onSelect, onOpenTrack, onReset }: {
+  roadmap: readonly Step[]; completed: ReadonlySet<string>; moveDate: string; today: string | null; isFounder: boolean; readOnly: boolean;
+  onSelect: (id: string) => void; onOpenTrack: () => void; onReset: () => void;
 }) {
   const nextUp = nextUpCards(roadmap, completed, moveDate, isFounder);
   return <div className="view-page dashboard">
@@ -51,6 +52,7 @@ export default function Dashboard({ roadmap, completed, moveDate, today, isFound
         {isFounder && <LaneColumn lane="company" roadmap={roadmap} completed={completed} moveDate={moveDate} today={today} onSelect={onSelect} onOpenTrack={onOpenTrack} />}
         <LaneColumn lane="personal" roadmap={roadmap} completed={completed} moveDate={moveDate} today={today} onSelect={onSelect} />
       </div>
+      {!readOnly && <div className="dashboard-actions"><Link href="/">Edit profile</Link><button type="button" disabled={!completed.size} onClick={onReset}>Reset progress</button></div>}
     </div>
   </div>;
 }

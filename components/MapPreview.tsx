@@ -10,7 +10,7 @@ export default function MapPreview({ moveDate }: { moveDate: string }) {
     { x: 95, y: 289, r: 38, name: ['Mobile', 'plan'], color: '#d3dfd5' },
     { x: 335, y: 62, r: 30, name: ['Arrive'], color: '#f1c7ba' },
   ];
-  return <Link href={`/map?p=${encodeProfile(defaultProfile(moveDate))}`} className="preview-link" aria-label="Explore a sample relocation map">
+  return <Link href={`/map?p=${encodeProfile(defaultProfile(moveDate))}`} className="preview-link" aria-label="Explore a sample plan">
     <div className="preview-top"><span className="preview-tag">ABU DHABI</span></div>
     <svg viewBox="0 0 520 475" className="preview-svg" aria-hidden="true">
       <defs><radialGradient id="previewHalo"><stop stopColor="#b7f3da" stopOpacity=".15" /><stop offset="1" stopColor="#b7f3da" stopOpacity="0" /></radialGradient></defs>

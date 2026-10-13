@@ -52,7 +52,7 @@ export default function Intake({ moveDate, demoMoveDate, invite }: { moveDate: s
   const [otherNationality, setOtherNationality] = useState(false);
   const [sentence, setSentence] = useState("");
   const [parsing, setParsing] = useState(false);
-  const [message, setMessage] = useState(invite ? "We’ve started your details. Check them, then build your map." : "Start with a sentence, or choose your details below.");
+  const [message, setMessage] = useState(invite ? "We’ve started your details. Check them, then build your plan." : "Start with a sentence, or choose your details below.");
   const [manualOnly, setManualOnly] = useState(false);
   const requestVersion = useRef(0);
   const requestController = useRef<AbortController | null>(null);
@@ -63,6 +63,7 @@ export default function Intake({ moveDate, demoMoveDate, invite }: { moveDate: s
     setProfile((previous) => normaliseProfile({ ...previous, ...changes }));
   };
   const demos: { label: string; profile: Profile }[] = [
+    { label: "Hub71 founder with family", profile: { ...defaultProfile(demoMoveDate), nationality: "US", household: "family", kids: 2, reason: "hub71_founder", budgetAED: 160_000 } },
     { label: "Solo Indian professional", profile: { ...defaultProfile(demoMoveDate), nationality: "IN", budgetAED: 80_000 } },
     { label: "British couple + 2 kids", profile: { ...defaultProfile(demoMoveDate), nationality: "GB", household: "family", kids: 2, budgetAED: 160_000 } },
     { label: "Nigerian Hub71 founder", profile: { ...defaultProfile(demoMoveDate), nationality: "NG", reason: "hub71_founder", budgetAED: 110_000 } },
@@ -82,15 +83,15 @@ export default function Intake({ moveDate, demoMoveDate, invite }: { moveDate: s
       const parsed = ProfileSchema.safeParse(result.profile);
       if (parsed.success) {
         applyProfile(parsed.data);
-        setMessage("Your details are filled in. Make any changes, then build your map.");
+        setMessage("Your details are filled in. Make any changes, then build your plan.");
       } else {
         setManualOnly(true);
-        setMessage("Choose your details below to build your map.");
+        setMessage("Choose your details below to build your plan.");
       }
     } catch {
       if (version === requestVersion.current) {
         setManualOnly(true);
-        setMessage("Choose your details below to build your map.");
+        setMessage("Choose your details below to build your plan.");
       }
     } finally {
       clearTimeout(timeout);
@@ -105,15 +106,15 @@ export default function Intake({ moveDate, demoMoveDate, invite }: { moveDate: s
   const showCountrySearch = otherNationality || !isFeatured(profile.nationality);
   return <div className="intake-wrap">
     <div className="intake-card">
-      <div className="card-heading"><span className="mini-label">YOUR MOVE, YOUR MAP</span><span className="time-label">About 30 seconds</span></div>
-      {invite && <div className="invite-banner"><strong>Hi {invite.name}, welcome to {invite.company}.</strong><span>Your team invited you to plan your move to Abu Dhabi. Check a few details to get your own map.</span></div>}
+      <div className="card-heading"><span className="mini-label">YOUR MOVE, YOUR PLAN</span><span className="time-label">About 30 seconds</span></div>
+      {invite && <div className="invite-banner"><strong>Hi {invite.name}, welcome to {invite.company}.</strong><span>Your team invited you to plan your move to Abu Dhabi. Check a few details to get your own plan.</span></div>}
       {!manualOnly && <div className="sentence-area">
         <label htmlFor="sentence">Tell us in one sentence</label>
         <div className="sentence-input"><textarea id="sentence" rows={3} maxLength={1200} value={sentence} onChange={(event) => { cancelParse(); setSentence(event.target.value); }} placeholder="I'm a USA founder moving with my wife and 2 kids in December 2026." />
           <button type="button" aria-label="Fill details from sentence" className="parse-button" onClick={parseSentence} disabled={parsing || !sentence.trim()}><Icon name={parsing ? "spark" : "arrow"} /></button>
         </div>
       </div>}
-      {!invite && <div className="demo-row"><span>Try a demo</span>{demos.map((demo) => <button type="button" key={demo.label} onClick={() => { cancelParse(); applyProfile(demo.profile); setMessage(`${demo.label}. Ready to build your map.`); }}><Icon name="spark" size={13} />{demo.label}</button>)}</div>}
+      {!invite && <div className="demo-row"><span>Try a demo</span>{demos.map((demo) => <button type="button" key={demo.label} onClick={() => { cancelParse(); applyProfile(demo.profile); setMessage(`${demo.label}. Ready to build your plan.`); }}><Icon name="spark" size={13} />{demo.label}</button>)}</div>}
       <p role="status" className="parse-message">{parsing ? "Reading your move…" : message}</p>
       <div className="profile-fields">
         <fieldset className="chip-field"><legend>Nationality</legend><div className="chips">
@@ -137,7 +138,7 @@ export default function Intake({ moveDate, demoMoveDate, invite }: { moveDate: s
         <div className="field-pair"><Choices label="Bringing pets?" value={profile.hasPets} items={[{ value: false, label: "No pets" }, { value: true, label: "Yes" }]} onChange={(value) => update({ hasPets: value })} />
           <Choices label="Will you drive?" value={profile.drives} items={[{ value: false, label: "No" }, { value: true, label: "Yes" }]} onChange={(value) => update({ drives: value })} /></div>
       </div>
-      <button className="build-button" type="button" disabled={parsing} onClick={buildMap}>Build my map <Icon name="arrow" size={20} /></button>
+      <button className="build-button" type="button" disabled={parsing} onClick={buildMap}>Build my plan <Icon name="arrow" size={20} /></button>
       <p className="privacy-note">No account needed. Your progress stays on this device.</p>
     </div>
   </div>;

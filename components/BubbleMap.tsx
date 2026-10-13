@@ -251,7 +251,8 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
       selectedIds.add(id);
       step.prerequisites.forEach(addWithPrerequisites);
     };
-    roadmap.filter((step) => step.phase === "before" || step.phase === "landing").forEach((step) => addWithPrerequisites(step.id));
+    // Personal arrival and identity steps, plus whatever they need (for founders, the ADGM licence chain before the visa).
+    roadmap.filter((step) => step.lane === "personal" && (step.phase === "before" || step.phase === "landing")).forEach((step) => addWithPrerequisites(step.id));
     addWithPrerequisites("emirates_id");
     addWithPrerequisites("uae_pass");
     const ordered: Step[] = [];
@@ -308,21 +309,21 @@ export default function BubbleMap({ profile, viewer }: { profile: Profile; viewe
     if (next.has(id)) next.delete(id); else next.add(id);
     setTrackDone(next); setStorageWarning(!saveTrackDone(next));
   }
-  function openTab(next: Tab) { setTab(next); setHovered(null); setSelected(null); }
+  function openTab(next: Tab) { setTab(next); setConnect(false); setHovered(null); setSelected(null); }
   async function shareMap() {
     try { await navigator.clipboard.writeText(window.location.href); setCopied(true); }
-    catch { setAnnouncement("Copy the address in your browser to share this map."); }
+    catch { setAnnouncement("Copy the address in your browser to share this plan."); }
   }
   function isDimmed(id: string) { return (hovered && id !== hovered && !downstream.has(id)) || (showCritical && !criticalIds.has(id)); }
   return <main className="map-page">
     <header className="map-header"><div className="map-brand-row"><Link className="brand map-brand" href="/"><span className="brand-mark">e.</span><span>ez move</span></Link><span className="map-header-divider" /><div className="map-person"><strong>{viewer ? `${viewer.name}’s move` : "Your move. Made easy."}</strong><span>{countryName(profile.nationality)} · {profile.household === "solo" ? "Solo move" : profile.household === "couple" ? "Moving with a partner" : `Family${profile.kids ? ` · ${profile.kids} kids` : ""}`}{profile.invitedBy ? ` · Joining ${profile.invitedBy}` : ""}</span><span className="move-countdown">Moving {formatDate(moveDate)}{daysToMove !== null && ` · ${countdown(daysToMove)}`}</span>
-      <span className="header-progress"><span className="progress-track" role="progressbar" aria-label="Steps done" aria-valuemin={0} aria-valuemax={countedSteps.length} aria-valuenow={progressCount}><motion.span animate={{ width: `${progress}%` }} transition={{ duration: reducedMotion ? 0 : 0.6 }} /></span><span>{progressCount} of {countedSteps.length} steps done</span>{milestone && <span className="next-milestone">Next milestone: {milestone.shortTitle}</span>}</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions">{viewer ? <><span className="sample-tag on-dark">Sample progress</span><Link href={viewer.backHref} className="share-button">Back to team</Link></> : <>{signedIn.length ? <button className="uae-pass-button signed-in" disabled={demoRunning} onClick={signOut}>Signed in · Sign out</button> : <button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button>}{isFounder && <Link href={teamHref} className="edit-profile team-link">Team</Link>}<Link href="/" className="edit-profile">Edit profile</Link><button type="button" className="edit-profile reset-progress" disabled={demoRunning || !completed.size} onClick={resetProgress}>Reset progress</button><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share map"}</span></button></>}</div></header>
+      <span className="header-progress"><span className="progress-track" role="progressbar" aria-label="Steps done" aria-valuemin={0} aria-valuemax={countedSteps.length} aria-valuenow={progressCount}><motion.span animate={{ width: `${progress}%` }} transition={{ duration: reducedMotion ? 0 : 0.6 }} /></span><span>{progressCount} of {countedSteps.length} steps done</span>{milestone && <span className="next-milestone">Next milestone: {milestone.shortTitle}</span>}</span></div>{profile.reason === "hub71_founder" && <span className="hub71-badge">Hub71 founder</span>}</div><div className="map-header-actions">{viewer ? <><span className="sample-tag on-dark">Sample progress</span><Link href={viewer.backHref} className="share-button">Back to team</Link></> : <>{signedIn.length ? <button className="uae-pass-button signed-in" disabled={demoRunning} onClick={signOut}>Signed in · Sign out</button> : <button className="uae-pass-button" disabled={demoRunning} onClick={() => setShowPassDemo(true)}>Sign in with UAE Pass</button>}{isFounder && <Link href={teamHref} className="edit-profile team-link">Team</Link>}<Link href="/" className="edit-profile">Edit profile</Link><button type="button" className="edit-profile reset-progress" disabled={demoRunning || !completed.size} onClick={resetProgress}>Reset progress</button><button className="share-button" onClick={shareMap}><Icon name={copied ? "check" : "link"} size={15} /><span>{copied ? "Copied" : "Share plan"}</span></button></>}</div></header>
     <nav className="view-tabs" aria-label="Your move">
       <button type="button" className={tab === "settling" ? "active" : ""} aria-pressed={tab === "settling"} onClick={() => openTab("settling")}><small>1</small>Settling in</button>
       <button type="button" className={tab === "living" ? "active" : ""} aria-pressed={tab === "living"} onClick={() => openTab("living")}><small>2</small>Living here</button>
       {tab === "settling" && <button type="button" className={`connect-toggle ${connect ? "active" : ""}`} aria-pressed={connect} onClick={() => { setConnect(!connect); setHovered(null); }}><Icon name={connect ? "close" : "spark"} size={13} />{connect ? "Back to dashboard" : "See how it connects"}</button>}
     </nav>
-    {tab === "settling" && !connect && <Dashboard roadmap={roadmap} completed={completed} moveDate={moveDate} today={today} isFounder={isFounder} onSelect={setSelected} onOpenTrack={() => openTab("hub71")} />}
+    {tab === "settling" && !connect && <Dashboard roadmap={roadmap} completed={completed} moveDate={moveDate} today={today} isFounder={isFounder} readOnly={!!viewer} onSelect={setSelected} onOpenTrack={() => openTab("hub71")} onReset={resetProgress} />}
     <div className="settle-view" style={tab === "settling" && connect ? undefined : { display: "none" }}>
     <div className="map-stage" ref={stage}>
       {completed.has("settled") && <button type="button" className="settled-nudge" onClick={() => openTab("living")}><Icon name="check" size={14} />You’re settled. Next: Living here <Icon name="chevron" size={13} /></button>}

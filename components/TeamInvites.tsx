@@ -30,7 +30,7 @@ export default function TeamInvites() {
   function remove(id: string) { const next = invites.filter((item) => item.id !== id); setInvites(next); saveInvites(next); }
   return <section className="team-card invite-card">
     <h2>Invite a hire</h2>
-    <p>They get a link that starts their own map. No account needed.</p>
+    <p>They get a link that starts their own plan. No account needed.</p>
     <div className="invite-form">
       <label>First name<input value={name} maxLength={60} onChange={(event) => setName(event.target.value)} placeholder="Alex" /></label>
       <label>Company<input value={company} maxLength={60} onChange={(event) => setCompany(event.target.value)} placeholder="Your startup" /></label>

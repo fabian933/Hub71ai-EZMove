@@ -23,7 +23,7 @@ export default async function TeamPage({ searchParams }: { searchParams: Promise
     <header className="home-nav team-nav"><Link href="/" className="brand"><span className="brand-mark">e.</span>ez move</Link>
       {encodedFounder ? <Link href={`/map?p=${encodedFounder}`} className="team-back"><Icon name="chevron" size={13} style={{ transform: "rotate(180deg)" }} />My map</Link> : <Link href="/" className="team-back">Build my map</Link>}</header>
     <section className="team-intro"><span className="eyebrow"><span /> YOUR TEAM</span><h1>Everyone’s move, in one place.</h1>
-      <p>Each hire gets their own map. You see where they are, and what needs attention.</p></section>
+      <p>Each hire gets their own plan. You see where they are, and what needs attention.</p></section>
     <div className="sample-banner light"><Icon name="spark" size={14} />Sample data. These hires are fictional, to show how team progress will look.</div>
     <div className="team-stats"><div><b>{rows.length}</b><span>hires moving</span></div><div><b>{rows.filter(({ progress }) => progress.daysToMove <= 0).length}</b><span>already arrived</span></div><div className={needsAttention ? "attention" : ""}><b>{needsAttention}</b><span>need attention</span></div></div>
     <div className="team-grid">
@@ -39,7 +39,7 @@ export default async function TeamPage({ searchParams }: { searchParams: Promise
             {progress.overdue.map((step) => <span key={step.id} className="flag overdue">Overdue · {step.shortTitle}</span>)}
             {progress.dueSoon.map((step) => <span key={step.id} className="flag soon">Due soon · {step.shortTitle}</span>)}
           </div>}
-          <Link className="hire-open" href={`/map?hire=${hire.id}${encodedFounder ? `&from=${encodedFounder}` : ""}`}>View {hire.name}’s map <Icon name="chevron" size={12} /></Link>
+          <Link className="hire-open" href={`/map?hire=${hire.id}${encodedFounder ? `&from=${encodedFounder}` : ""}`}>View {hire.name}’s plan <Icon name="chevron" size={12} /></Link>
         </li>)}</ul>
       </section>
       <TeamInvites />

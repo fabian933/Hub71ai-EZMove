@@ -16,10 +16,10 @@ function answersFrom(roadmap: readonly Step[]): Answer[] {
   if (eid) {
     answers.push({ question: "What do I need for my Emirates ID?", stepId: eid.id, answer: eid.documents.length ? `Usually: ${eid.documents.join(", ").toLowerCase()}. Confirm with ${eid.provider}.` : `Confirm the documents with ${eid.provider}.` });
     const unlocks = [...descendants(eid.id, roadmap)].map((id) => byId.get(id)?.shortTitle).filter(Boolean);
-    answers.push({ question: "Why does everything wait for Emirates ID?", stepId: eid.id, answer: `It unlocks ${unlocks.length} steps on your map, including ${unlocks.slice(0, 4).join(", ").toLowerCase()}.` });
+    answers.push({ question: "Why does everything wait for Emirates ID?", stepId: eid.id, answer: `It unlocks ${unlocks.length} steps in your plan, including ${unlocks.slice(0, 4).join(", ").toLowerCase()}.` });
   }
   const before = roadmap.filter((step) => step.phase === "before" && step.category === "before_you_fly");
-  if (before.length) answers.push({ question: "What should I do before I fly?", stepId: before[0].id, answer: `${before.map((step) => step.shortTitle).join(", ")}. Each has a do-by date on your map.` });
+  if (before.length) answers.push({ question: "What should I do before I fly?", stepId: before[0].id, answer: `${before.map((step) => step.shortTitle).join(", ")}. Each has a do-by date in your plan.` });
   const doctor = byId.get("find_doctor");
   if (doctor) answers.push({ question: "How do I find a doctor?", stepId: doctor.id, answer: `After your health insurance card. Provider: ${doctor.provider}.` });
   const credit = byId.get("credit_history");
@@ -62,7 +62,7 @@ export default function LivingHere({ roadmap, completed, chosenArea, isFounder, 
 
       <section className="view-section"><h2>Answers</h2>
         <div className="answer-list">{answersFrom(roadmap).map((item) => <details key={item.question}><summary>{item.question}<Icon name="chevron" size={13} /></summary><p>{item.answer}</p><button type="button" onClick={() => onSelect(item.stepId)}>Open step <Icon name="chevron" size={12} /></button></details>)}</div>
-        <p className="view-footnote">Answers come from the steps in your map. Confirm details with the official provider.</p>
+        <p className="view-footnote">Answers come from the steps in your plan. Confirm details with the official provider.</p>
       </section>
     </div>
   </div>;
