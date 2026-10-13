@@ -1,6 +1,6 @@
 "use client";
-import { getState, nextUpSteps } from "@/lib/engine";
-import { cardStatus, laneSteps, laneTitles, settlingSteps, type Lane } from "@/lib/dashboard";
+import { getState } from "@/lib/engine";
+import { cardStatus, laneSteps, laneTitles, nextUpCards, type Lane } from "@/lib/dashboard";
 import type { Step } from "@/lib/schema";
 import Icon from "./Icon";
 
@@ -37,12 +37,12 @@ export default function Dashboard({ roadmap, completed, moveDate, today, isFound
   roadmap: readonly Step[]; completed: ReadonlySet<string>; moveDate: string; today: string | null; isFounder: boolean;
   onSelect: (id: string) => void; onOpenTrack: () => void;
 }) {
-  const nextUp = nextUpSteps(settlingSteps(roadmap), completed, moveDate);
+  const nextUp = nextUpCards(roadmap, completed, moveDate, isFounder);
   return <div className="view-page dashboard">
     <div className="dashboard-inner">
       <section className="next-up-row" aria-labelledby="next-up-title">
         <h2 id="next-up-title">Next up</h2>
-        {nextUp.length ? <div className="next-up-cards">{nextUp.map(({ step }) => <div key={step.id} className="next-up-card">
+        {nextUp.length ? <div className="next-up-cards">{nextUp.map((step) => <div key={step.id} className="next-up-card">
           <span className="next-up-lane">{step.lane === "company" ? "Your company" : "You and your family"}</span>
           <StepCard step={step} roadmap={roadmap} completed={completed} moveDate={moveDate} today={today} onSelect={onSelect} />
         </div>)}</div> : <p className="lane-empty">Nothing waiting on you right now.</p>}

@@ -64,6 +64,10 @@ export const StepSchema = z.object({
   documents: z.array(text),
   costAED: range.nullable(),
   durationDays: range.nullable(),
+  /** One plain sentence on why the step matters, using only facts already in the step's data. */
+  why: text.nullable(),
+  /** A step worth calling out as the next milestone in the header. */
+  milestone: z.boolean().optional(),
   /** Plain-language timing from a source, e.g. "Usually 30–60 days". */
   durationLabel: text.nullable(),
   provider: text,

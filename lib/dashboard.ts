@@ -1,5 +1,4 @@
-import { deadlineTone, getDoByDate, getState, type CompletedIds, type DeadlineTone } from "./engine";
-import { descendants } from "./map";
+import { deadlineTone, getDoByDate, getState, nextUpSteps, type CompletedIds, type DeadlineTone } from "./engine";
 import type { Step } from "./schema";
 
 export type Lane = Step["lane"];
@@ -8,21 +7,28 @@ export const laneTitles: Record<Lane, string> = { company: "Your company · Hub7
 /** Settling-in steps: everything before the Living here phase. */
 export const settlingSteps = (roadmap: readonly Step[]) => roadmap.filter((step) => step.phase !== "living");
 
-/** A lane's steps in dependency order: by depth in the graph (longest chain of prerequisites), then data order. */
-export function laneSteps(roadmap: readonly Step[], lane: Lane): Step[] {
+/** Depth of each settling-in step: the longest chain of prerequisites before it. */
+function depths(roadmap: readonly Step[]): Map<string, number> {
   const all = settlingSteps(roadmap);
   const byId = new Map(all.map((step) => [step.id, step]));
-  const depth = new Map<string, number>();
+  const memo = new Map<string, number>();
   const depthOf = (step: Step): number => {
-    const known = depth.get(step.id);
+    const known = memo.get(step.id);
     if (known !== undefined) return known;
     const value = Math.max(-1, ...step.prerequisites.map((id) => byId.get(id)).filter((item): item is Step => !!item).map(depthOf)) + 1;
-    depth.set(step.id, value);
+    memo.set(step.id, value);
     return value;
   };
-  return all.map((step, index) => ({ step, index, depth: depthOf(step) }))
+  all.forEach(depthOf);
+  return memo;
+}
+
+/** A lane's steps in dependency order: by depth in the graph, then data order. */
+export function laneSteps(roadmap: readonly Step[], lane: Lane): Step[] {
+  const depth = depths(roadmap);
+  return settlingSteps(roadmap).map((step, index) => ({ step, index }))
     .filter(({ step }) => step.lane === lane)
-    .sort((a, b) => a.depth - b.depth || a.index - b.index)
+    .sort((a, b) => depth.get(a.step.id)! - depth.get(b.step.id)! || a.index - b.index)
     .map(({ step }) => step);
 }
 
@@ -49,15 +55,22 @@ export function cardStatus(step: Step, roadmap: readonly Step[], completed: Comp
   return { kind: "waiting", on, otherLane: on.lane !== step.lane };
 }
 
-/** One plain sentence on why a step matters, derived only from the graph. */
-export function whyItMatters(step: Step, roadmap: readonly Step[]): string {
-  const byId = new Map(roadmap.map((item) => [item.id, item]));
-  if (step.id === "settled") return "The point where the essentials are in place.";
-  const all = [...descendants(step.id, roadmap)].map((id) => byId.get(id)).filter((item): item is Step => !!item);
-  const unlocks = all.filter((item) => item.id !== "settled");
-  if (!all.length) return step.phase === "living" ? "Part of feeling at home once you're settled." : "One of the steps between you and feeling settled.";
-  const crossLane = unlocks.find((item) => item.lane !== step.lane);
-  const names = unlocks.slice(0, 3).map((item) => item.shortTitle).join(", ");
-  if (!unlocks.length) return "The last step before you're settled.";
-  return `Unlocks ${all.length} later ${all.length === 1 ? "step" : "steps"}, including ${names}.${crossLane ? ` It also holds up ${crossLane.shortTitle} in ${crossLane.lane === "company" ? "your company's" : "your personal"} plan.` : ""}`;
+/** The steps this one directly unlocks in this person's plan. */
+export function directUnlocks(step: Step, roadmap: readonly Step[]): Step[] {
+  return roadmap.filter((item) => item.prerequisites.includes(step.id));
+}
+
+/** The nearest milestone that isn't done yet, by depth in the graph. */
+export function nextMilestone(roadmap: readonly Step[], completed: CompletedIds): Step | null {
+  const done = new Set(completed);
+  const depth = depths(roadmap);
+  return settlingSteps(roadmap).filter((step) => step.milestone && !done.has(step.id))
+    .sort((a, b) => (depth.get(a.id) ?? 0) - (depth.get(b.id) ?? 0))[0] ?? null;
+}
+
+/** Next up: for founders the next company step always leads (it's the critical path), then the earliest do-by dates. */
+export function nextUpCards(roadmap: readonly Step[], completed: CompletedIds, moveDate: string, includeCompany: boolean, count = 3): Step[] {
+  const company = includeCompany ? laneSteps(roadmap, "company").find((step) => getState(step, completed) === "available") : undefined;
+  const rest = nextUpSteps(settlingSteps(roadmap), completed, moveDate, count + 1).map(({ step }) => step).filter((step) => step.id !== company?.id);
+  return [...(company ? [company] : []), ...rest].slice(0, count);
 }

@@ -363,7 +363,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* Card dashboard (default view on /map). */
 .connect-toggle { margin-left: auto; align-self: center; display: inline-flex !important; align-items: center; gap: 6px; padding: 7px 12px !important; margin-bottom: 6px; border-radius: 20px !important; border: 1px solid #4d6b55 !important; color: #c6d9bf !important; font-size: 11px !important; }
 .connect-toggle.active { background: #2d4a3c !important; color: #e5efd8 !important; }
-.header-progress { display: flex; align-items: center; gap: 8px; font-size: 10px; color: #9cb29f; }
+.header-progress { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; font-size: 10px; color: #9cb29f; }
 .header-progress .progress-track { width: 110px; flex-shrink: 0; }
 .header-progress .progress-track > span { display: block; height: 100%; background: #b4db9f; border-radius: inherit; }
 .dashboard-inner { max-width: 1120px; margin: 0 auto; padding: 24px 28px 70px; }
@@ -407,6 +407,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .step-status em { font-style: normal; font-size: 9px; padding: 1px 6px; border-radius: 10px; border: 1px solid #44607e; color: #b9d0ec; }
 .view-back { display: inline-flex; align-items: center; gap: 5px; margin-bottom: 18px; padding: 0; border: 0; background: none; color: #b4db9f; font-size: 11px; }
 .why-section { border-top: 0; padding-top: 0; }
+.unlocks-next { display: grid; gap: 7px; margin-top: 12px; }
+.unlocks-next > span { font-size: 10px; font-weight: 600; color: #6d8162; }
+.next-milestone { color: #c7edb7; }
 .why-section p { color: #5f7a57 !important; font-size: 12px !important; }
 .dependency-list { display: flex !important; flex-wrap: wrap; }
 .dependency-list > button { padding: 6px 10px 6px 6px !important; border-radius: 20px !important; }
