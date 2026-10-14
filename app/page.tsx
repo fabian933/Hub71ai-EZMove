@@ -1,10 +1,12 @@
 import { ArrowRight } from "lucide-react";
 import "./site.css";
-import SiteNav, { Logo } from "@/components/site/SiteNav";
+import SiteNav from "@/components/site/SiteNav";
 import PhoneMock from "@/components/site/PhoneMock";
 import TeamMock from "@/components/site/TeamMock";
 import PlanMock from "@/components/site/PlanMock";
-import { DEMO_MAILTO, employeeCards, features, partnerTiles, teamCards } from "@/components/site/content";
+import FeatureVisual from "@/components/site/FeatureVisual";
+import SiteFooter from "@/components/site/SiteFooter";
+import { DEMO_HREF, employeeCards, features, partnerTiles, teamCards } from "@/components/site/content";
 import { ButtonLink } from "@/components/ui/Button";
 import IconTile from "@/components/ui/IconTile";
 import Badge from "@/components/ui/Badge";
@@ -34,7 +36,7 @@ export default function Home() {
         <div id="teams" className="view-row">
           <div className="view-text">
             <span className="view-kicker">For teams</span>
-            <p className="view-lead">See every founder&apos;s move in one place: licence, visa, bank and incentives. Spot who&apos;s stuck before they ask.</p>
+            <p className="view-lead">See every employee&apos;s move in one place: licence, visa, bank and benefits. Spot who&apos;s stuck before they ask.</p>
             <CardList cards={teamCards} />
           </div>
           <TeamMock />
@@ -58,17 +60,22 @@ export default function Home() {
       </div></section>
 
       <section id="features" className="section section-white" aria-labelledby="features-title"><div className="container">
-        <h2 id="features-title" className="section-title">Key features</h2>
-        <ul className="feature-grid">{features.map((feature) => <li key={feature.name}>
-          <IconTile icon={feature.icon} size={36} /><span>{feature.name}</span>{feature.soon && <Badge>Coming soon</Badge>}
+        <h2 id="features-title" className="section-title">Platform features</h2>
+        <ul className="feature-grid">{features.map((feature) => <li key={feature.name} className={`feature-card${feature.soon ? " soon" : ""}${feature.visual === "partners" ? " wide" : ""}`}>
+          {feature.visual && <FeatureVisual kind={feature.visual} />}
+          <div className="feature-copy">
+            <h3><IconTile icon={feature.icon} size={32} />{feature.name}{feature.soon && <Badge>Coming soon</Badge>}</h3>
+            <p>{feature.text}</p>
+          </div>
         </li>)}</ul>
+        <p className="feature-note">Visuals show demo data.</p>
       </div></section>
 
       <section className="cta"><div className="container cta-inner">
-        <h2>Bring your next cohort in with less chasing.</h2>
-        <ButtonLink href={DEMO_MAILTO} className="btn-light">Book a demo</ButtonLink>
+        <h2>Bring your next hires in with less chasing.</h2>
+        <ButtonLink href={DEMO_HREF} className="btn-light">Book a demo</ButtonLink>
       </div></section>
     </main>
-    <footer className="site-footer"><div className="container site-footer-inner"><Logo /><span>© 2026 EZ Move</span></div></footer>
+    <SiteFooter />
   </div>;
 }

@@ -11,7 +11,7 @@ export default function PhoneMock() {
         <span className="mock-label">Next step</span>
         <strong>Get your ADGM licence</strong>
         <div className="mock-row-meta"><StatusPill status="in_progress" /><span>Usually 30–60 days</span></div>
-        <span className="mock-guide"><BookOpen size={12} aria-hidden />From Hub71’s onboarding guide</span>
+        <span className="mock-guide"><BookOpen size={12} aria-hidden />From your company’s guide</span>
         <span className="mock-cta">See what you need <ArrowRight size={14} aria-hidden /></span>
       </div>
       <span className="mock-label">Milestones</span>

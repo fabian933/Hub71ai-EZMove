@@ -4,11 +4,16 @@
 
 ## Product
 EZ Move is a relocation platform with two sides:
-- **Employer side (`/team`)**: programme and HR teams, starting with Hub71's operations team. They see every founder's move in one place.
+- **Employer side (`/team`)**: HR and mobility teams, starting with Hub71's operations team. They see every employee's move in one place.
 - **Employee side (`/app`)**: the founder or hire making the move. Phone-first web.
 - Plus a **marketing site (`/`)**.
 
-The positioning is enterprise mobility, but the copy speaks Hub71's language: Clara, ADGM licence, visas, incentives, Emirates ID.
+The positioning is enterprise mobility. Hub71 is the first customer.
+
+## Copy
+- Marketing and UI copy stays company-generic: speak to companies and their employees. No "Hub71", "cohort", "programme" or founder-only wording in the marketing site or shared UI.
+- Keep UAE process terms: Clara, ADGM, licence, visa, Emirates ID, TAMM.
+- Hub71-specific facts live only in the data (e.g. `source: "hub71_guide"` steps and the company lane), and are shown only when a profile belongs to that company.
 
 ## Design rules
 - Calm and clear. One idea per screen section. Short copy: one sentence per item at most, no paragraphs inside the app.

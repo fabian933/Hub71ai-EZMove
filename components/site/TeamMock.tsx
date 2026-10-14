@@ -11,7 +11,7 @@ const rows = [
 /** A simplified mock of the team view. Fictional companies, demo data only. */
 export default function TeamMock() {
   return <div className="team-mock" role="img" aria-label="Preview of the team view (demo data)">
-    <div className="team-mock-head"><span>Founders this cohort</span><SourceTag source="demo" /></div>
+    <div className="team-mock-head"><span>People moving</span><SourceTag source="demo" /></div>
     <ul>{rows.map((row) => <li key={row.company}><span className="team-mock-name">{row.company}<small>{row.step}</small></span>{row.status}</li>)}</ul>
   </div>;
 }
