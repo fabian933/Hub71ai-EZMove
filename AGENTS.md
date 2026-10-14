@@ -36,6 +36,7 @@ The positioning is enterprise mobility. Hub71 is the first customer.
 - Facts from Hub71's 2026 onboarding guide are labelled **"From Hub71's onboarding guide"** (`source: "hub71_guide"`). Official-source facts use `source: "official"`.
 - Every data item has `sourceUrl` and `lastVerified` (null when unknown).
 - Anything illustrative or sample is labelled as such on screen.
+- Demo people live in `data/demo-team.json` (fictional). The team view (`/team`) and the employee demo (`/app?demo=founder` for Sara, `/app?demo=<id>` for others) both read it, so they always match. `lib/demoTeam.ts` checks each person's progress against the step graph.
 - Deterministic rules decide which steps apply. AI is only used to parse the intake sentence and explain steps, grounded in `/data`.
 
 ## Steps data and engine

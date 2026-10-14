@@ -1,0 +1,41 @@
+{
+  "note": "Fictional people and companies for the team view and the employee demo. Shown with a Demo data tag.",
+  "people": [
+    {
+      "id": "sara", "name": "Sara Lindqvist", "company": "Northwind Robotics", "hires": 3,
+      "profile": { "nationality": "SE", "household": "family", "kids": 2, "reason": "hub71_founder", "budgetAED": 180000, "hasPets": false, "drives": true },
+      "moveInDays": 56,
+      "completed": ["acceptance_letter", "clara_kyc", "degree_attestation", "marriage_cert_attestation"],
+      "started": [],
+      "currentStepDays": 38,
+      "daysToLicence": null
+    },
+    {
+      "id": "omar", "name": "Omar Haddad", "company": "Tidewater Health", "hires": 1,
+      "profile": { "nationality": "JO", "household": "solo", "kids": 0, "reason": "hub71_founder", "budgetAED": 95000, "hasPets": false, "drives": false },
+      "moveInDays": -6,
+      "completed": ["acceptance_letter", "clara_kyc", "adgm_licence", "establishment_card", "uae_mobile_number", "degree_attestation", "medication_check", "temp_accommodation", "entry_permit", "arrive"],
+      "started": ["medical_fitness"],
+      "currentStepDays": 5,
+      "daysToLicence": 41
+    },
+    {
+      "id": "priya", "name": "Priya Nair", "company": "Brightline Pay", "hires": 2,
+      "profile": { "nationality": "IN", "household": "couple", "kids": 0, "reason": "hub71_founder", "budgetAED": 120000, "hasPets": false, "drives": false },
+      "moveInDays": -45,
+      "completed": ["acceptance_letter", "clara_kyc", "adgm_licence", "incentives_agreement", "establishment_card", "uae_mobile_number", "degree_attestation", "marriage_cert_attestation", "medication_check", "temp_accommodation", "entry_permit", "arrive", "medical_fitness", "biometrics", "emirates_id"],
+      "started": ["bank_account"],
+      "currentStepDays": 21,
+      "daysToLicence": 52
+    },
+    {
+      "id": "daniel", "name": "Daniel Kim", "company": "Cedar Grid", "hires": 4,
+      "profile": { "nationality": "US", "household": "family", "kids": 2, "reason": "hub71_founder", "budgetAED": 200000, "hasPets": false, "drives": false },
+      "moveInDays": -120,
+      "completed": "all_settling",
+      "started": [],
+      "currentStepDays": null,
+      "daysToLicence": 35
+    }
+  ]
+}

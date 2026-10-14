@@ -2,7 +2,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { getState, loadCompletedIds, moveDateOf, personalise, saveCompletedIds, todayISO } from "./engine";
 import { decodeProfile, normaliseProfile } from "./profile";
-import { demoFounder } from "./demo";
+import { demoFor } from "./demo";
 import { uiStep } from "./copy";
 import { ProfileSchema, type Profile, type Step } from "./schema";
 
@@ -34,7 +34,7 @@ type Move = {
   undoDone: (id: string) => void;
   markStarted: (id: string) => void;
   toggleDoc: (stepId: string, doc: string) => void;
-  loadDemo: () => void;
+  loadDemo: (id?: string) => void;
 };
 
 const MoveContext = createContext<Move | null>(null);
@@ -59,18 +59,20 @@ export function MoveProvider({ children }: { children: ReactNode }) {
   const [docs, setDocs] = useState<Record<string, string[]>>({});
   const [today, setToday] = useState<string | null>(null);
 
-  const applyDemo = useCallback(() => {
-    const demo = demoFounder();
+  const applyDemo = useCallback((id = "founder") => {
+    const demo = demoFor(id);
+    if (!demo) return false;
     setProfileState(demo.profile); setCompleted(new Set(demo.completed)); setStarted(new Set(demo.started)); setDocs({}); setIsDemo(true);
     write(PROFILE_KEY, demo.profile); saveCompletedIds(demo.completed); write(STARTED_KEY, demo.started); write(DOCS_KEY, {}); write(DEMO_KEY, true);
+    return true;
   }, []);
 
   useEffect(() => {
     setToday(todayISO());
     const params = new URLSearchParams(window.location.search);
     const fromLink = decodeProfile(params.get("p") ?? undefined);
-    if (params.get("demo") === "founder") applyDemo();
-    else {
+    const demoId = params.get("demo");
+    if (!(demoId && applyDemo(demoId))) {
       const stored = ProfileSchema.safeParse(read(PROFILE_KEY, null));
       const next = fromLink ?? (stored.success ? normaliseProfile(stored.data) : null);
       if (fromLink) { write(PROFILE_KEY, fromLink); write(DEMO_KEY, null); }
@@ -116,9 +118,21 @@ export function MoveProvider({ children }: { children: ReactNode }) {
       const next = { ...docs, [stepId]: [...current] };
       setDocs(next); write(DOCS_KEY, next);
     },
-    loadDemo: applyDemo,
+    loadDemo: (id) => { applyDemo(id); },
   }), [ready, profile, isDemo, roadmap, completed, started, docs, today, applyDemo]);
 
+  return <MoveContext.Provider value={value}>{children}</MoveContext.Provider>;
+}
+
+/** Read-only plan for someone else (the team view): same shape, actions do nothing. */
+export function StaticMoveProvider({ profile, completed, started, today, children }: {
+  profile: Profile; completed: ReadonlySet<string>; started: ReadonlySet<string>; today: string; children: ReactNode;
+}) {
+  const value = useMemo<Move>(() => ({
+    ready: true, profile, isDemo: true, roadmap: personalise(profile).map(uiStep),
+    completed: new Set(completed), started: new Set(started), docs: {}, today, moveDate: moveDateOf(profile),
+    setProfile() {}, markDone() {}, undoDone() {}, markStarted() {}, toggleDoc() {}, loadDemo() {},
+  }), [profile, completed, started, today]);
   return <MoveContext.Provider value={value}>{children}</MoveContext.Provider>;
 }
 

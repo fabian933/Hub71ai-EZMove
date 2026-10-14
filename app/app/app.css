@@ -41,16 +41,6 @@
 .next-card .pill-in_progress { background: var(--blue-light); color: var(--navy); }
 .next-card .pill-todo { background: transparent; color: var(--white); border-color: rgb(254 254 254 / 70%); }
 
-/* Step rows */
-.step-list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--grey); border-radius: var(--radius); overflow: hidden; }
-.step-list li + li { border-top: 1px solid var(--grey); }
-.step-row { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; background: var(--white); }
-.step-row:hover { background: var(--cream); }
-.step-row-icon { display: grid; place-items: center; flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px; background: var(--blue-light); color: var(--navy); }
-.step-row-body { flex: 1; min-width: 0; display: grid; gap: 5px; justify-items: start; }
-.step-row-title { font-size: 15px; font-weight: 600; line-height: 1.3; }
-.step-row-chevron { flex-shrink: 0; color: var(--muted); }
-
 /* Step detail */
 .back-link { justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 0; border: 0; background: none; color: var(--green); font-size: 14px; font-weight: 600; }
 .step-head { display: grid; gap: 10px; }

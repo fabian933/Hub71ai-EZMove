@@ -42,7 +42,7 @@ export default function Home() {
   return <div className="app-page">
     <header className="home-head">
       <div><h1>{name ? `Hi ${name}` : "Hi there"}</h1>
-        <p>Moving {formatDate(moveDate)}{days !== null && ` · ${days > 0 ? `${days} days to go` : days === 0 ? "today" : `${-days} days ago`}`}</p></div>
+        <p>{days !== null && days < 0 ? `Moved ${formatDate(moveDate)} · ${-days} days ago` : `Moving ${formatDate(moveDate)}${days === null ? "" : days === 0 ? " · today" : ` · ${days} days to go`}`}</p></div>
       <div className="home-head-side">{isDemo && <SourceTag source="demo" />}<Link href="/app/start" className="edit-link">Edit details</Link></div>
     </header>
 
