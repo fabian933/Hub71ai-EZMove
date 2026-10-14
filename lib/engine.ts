@@ -143,6 +143,31 @@ export function nextUpSteps(roadmap: readonly Step[], completed: CompletedIds, m
     .map(({ step, doBy }) => ({ step, doBy }));
 }
 
+/** Every step that depends on this one, directly or indirectly. */
+export function descendants(stepId: string, roadmap: readonly Step[]): Set<string> {
+  const ids = new Set<string>();
+  const queue = [stepId];
+  for (let i = 0; i < queue.length; i++) {
+    for (const step of roadmap) if (step.prerequisites.includes(queue[i]) && !ids.has(step.id)) {
+      ids.add(step.id); queue.push(step.id);
+    }
+  }
+  return ids;
+}
+
+/** Every ancestor required for settled, including parallel prerequisite branches. */
+export function settlementSteps(roadmap: readonly Step[]): Set<string> {
+  const byId = new Map(roadmap.map((step) => [step.id, step]));
+  const required = new Set<string>();
+  function visit(id: string) {
+    if (required.has(id)) return;
+    required.add(id);
+    byId.get(id)?.prerequisites.forEach(visit);
+  }
+  visit("settled");
+  return required;
+}
+
 export const COMPLETED_STORAGE_KEY = "ezmove.completed.v1";
 export type ProgressStorage = Pick<Storage, "getItem" | "setItem">;
 function browserStorage(): ProgressStorage | undefined {

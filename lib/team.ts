@@ -1,7 +1,6 @@
 import { z } from "zod";
 import rawTeam from "@/data/team.sample.json";
-import { daysBetween, getDoByDate, nextUpSteps, personalise } from "./engine";
-import { settlementSteps } from "./map";
+import { daysBetween, getDoByDate, nextUpSteps, personalise, settlementSteps } from "./engine";
 import { defaultProfile, normaliseProfile } from "./profile";
 import { ProfileSchema, type Profile, type Step } from "./schema";
 
