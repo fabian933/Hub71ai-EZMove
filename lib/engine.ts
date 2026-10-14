@@ -8,7 +8,7 @@ const completedSet = (ids: CompletedIds) => new Set(ids);
 
 export function personalise(profile: Profile): Step[] {
   const parsed = ProfileSchema.parse(profile);
-  const reason = parsed.reason === "other" ? "job" : parsed.reason;
+  const reason = parsed.reason === "other" || parsed.reason === "startup_hire" ? "job" : parsed.reason;
   const selected = steps.filter(({ appliesIf: rule }) =>
     (!rule.household || rule.household.includes(parsed.household)) &&
     (rule.minKids === undefined || parsed.kids >= rule.minKids) &&

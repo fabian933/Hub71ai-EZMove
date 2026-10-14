@@ -10,7 +10,7 @@ for (const step of steps) {
 }
 
 const phaseRank = { before: 0, landing: 1, settling: 2, living: 3 };
-const reasons = ["job", "hub71_founder", "own_business", "other"];
+const reasons = ["job", "hub71_founder", "own_business", "other", "startup_hire"];
 const edgesOf = (step) => [...step.prerequisites, ...(step.overrides ?? []).flatMap((override) => override.addPrerequisites ?? [])];
 
 for (const step of steps) {
@@ -45,7 +45,7 @@ for (const step of steps) visit(step.id, []);
 
 // Per reason: which steps apply, and no personal step may wait on a company step outside the founder plan.
 for (const reason of reasons) {
-  const applies = steps.filter((step) => !step.appliesIf.reasons || step.appliesIf.reasons.includes(reason === "other" ? "job" : reason));
+  const applies = steps.filter((step) => !step.appliesIf.reasons || step.appliesIf.reasons.includes(reason === "other" || reason === "startup_hire" ? "job" : reason));
   const ids = new Set(applies.map((step) => step.id));
   const company = applies.filter((step) => step.lane === "company");
   if (reason !== "hub71_founder" && company.length) errors.push(`${reason} should have no company lane, has ${company.map((step) => step.id).join(", ")}`);

@@ -1,0 +1,119 @@
+[
+  {
+    "id": "clara",
+    "name": "Clara",
+    "category": "company_setup",
+    "categoryLabel": "Company setup",
+    "steps": [
+      "clara_kyc",
+      "adgm_licence"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "wework",
+    "name": "WeWork",
+    "category": "office",
+    "categoryLabel": "Office",
+    "steps": [],
+    "placeholder": false
+  },
+  {
+    "id": "adnic",
+    "name": "ADNIC",
+    "category": "health",
+    "categoryLabel": "Health insurance",
+    "steps": [
+      "health_insurance_card"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "adcb",
+    "name": "ADCB",
+    "category": "bank",
+    "categoryLabel": "Banking",
+    "steps": [
+      "bank_account",
+      "business_bank_account"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "fab",
+    "name": "FAB",
+    "category": "bank",
+    "categoryLabel": "Banking",
+    "steps": [
+      "bank_account",
+      "business_bank_account"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "mashreq",
+    "name": "Mashreq",
+    "category": "bank",
+    "categoryLabel": "Banking",
+    "steps": [
+      "bank_account",
+      "business_bank_account"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "emirates-nbd",
+    "name": "Emirates NBD",
+    "category": "bank",
+    "categoryLabel": "Banking",
+    "steps": [
+      "bank_account",
+      "business_bank_account"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "adib",
+    "name": "ADIB",
+    "category": "bank",
+    "categoryLabel": "Banking",
+    "steps": [
+      "bank_account",
+      "business_bank_account"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "wio",
+    "name": "Wio",
+    "category": "bank",
+    "categoryLabel": "Banking",
+    "steps": [
+      "bank_account",
+      "business_bank_account"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "hsbc",
+    "name": "HSBC",
+    "category": "bank",
+    "categoryLabel": "Banking",
+    "steps": [
+      "bank_account",
+      "business_bank_account"
+    ],
+    "placeholder": false
+  },
+  {
+    "id": "housing-partners",
+    "name": "Partners to confirm",
+    "category": "housing",
+    "categoryLabel": "Housing",
+    "steps": [
+      "lease_signing",
+      "temp_accommodation"
+    ],
+    "placeholder": true
+  }
+]

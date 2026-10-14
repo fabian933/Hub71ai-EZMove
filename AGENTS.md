@@ -14,6 +14,7 @@ The positioning is enterprise mobility. Hub71 is the first customer.
 - Marketing and UI copy stays company-generic: speak to companies and their employees. No "Hub71", "cohort", "programme" or founder-only wording in the marketing site or shared UI.
 - Keep UAE process terms: Clara, ADGM, licence, visa, Emirates ID, TAMM.
 - Hub71-specific facts live only in the data (e.g. `source: "hub71_guide"` steps and the company lane), and are shown only when a profile belongs to that company.
+- In the app, step text goes through `lib/copy.ts` (`uiStep`/`uiText`) so Hub71 wording in the data shows generically (e.g. "Hub71 incentives" → "Company benefits", source tag "Company guide"). Add a rewrite there rather than editing the data.
 
 ## Design rules
 - Calm and clear. One idea per screen section. Short copy: one sentence per item at most, no paragraphs inside the app.

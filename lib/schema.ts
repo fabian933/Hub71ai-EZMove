@@ -6,7 +6,8 @@ export const iso2Codes = new Set(
 const text = z.string().trim().min(1);
 const id = text.regex(/^[a-z][a-z0-9_-]*$/);
 const household = z.enum(["solo", "couple", "family"]);
-const reason = z.enum(["job", "hub71_founder", "own_business", "other"]);
+/** hub71_founder = "Setting up a company" in the UI; startup_hire = "Joining a startup" (treated like a job). */
+const reason = z.enum(["job", "hub71_founder", "own_business", "other", "startup_hire"]);
 const range = z.object({ min: z.number().finite().nonnegative(), max: z.number().finite().nonnegative() })
   .strict().refine(({ min, max }) => max >= min, "max must be at least min");
 const link = z.url().refine((value) => /^https?:\/\//.test(value), "Use an HTTP(S) URL").nullable();
@@ -30,6 +31,10 @@ export const ProfileSchema = z.object({
   drives: z.boolean(),
   /** Company name when the person arrived through a founder's team invite. */
   invitedBy: z.string().trim().min(1).max(60).optional(),
+  /** The person's name; the app greets them by the first word. */
+  name: z.string().trim().min(1).max(60).optional(),
+  /** The person's company, for founders. */
+  company: z.string().trim().min(1).max(60).optional(),
 }).strict();
 
 /** Extra facts that only apply to some move reasons, e.g. Hub71 founders. */
@@ -68,6 +73,8 @@ export const StepSchema = z.object({
   why: text.nullable(),
   /** A step worth calling out as the next milestone in the header. */
   milestone: z.boolean().optional(),
+  /** Handled by a third party once started (e.g. the ADGM licence via Clara): shown as In progress when ready. */
+  thirdParty: z.boolean().optional(),
   /** Plain-language timing from a source, e.g. "Usually 30–60 days". */
   durationLabel: text.nullable(),
   provider: text,
@@ -91,7 +98,16 @@ export const SchoolSchema = z.object({
   feeAED: range.nullable(), website: link, ...provenance,
 }).strict();
 
+export const ProviderSchema = z.object({
+  id, name: text, category: z.enum(["company_setup", "office", "health", "bank", "housing"]), categoryLabel: text,
+  /** Steps where this provider is shown in context. */
+  steps: z.array(id),
+  /** Placeholder until partners are confirmed. */
+  placeholder: z.boolean(),
+}).strict();
+
 export type Profile = z.infer<typeof ProfileSchema>;
+export type Provider = z.infer<typeof ProviderSchema>;
 export type Step = z.infer<typeof StepSchema>;
 export type Community = z.infer<typeof CommunitySchema>;
 export type School = z.infer<typeof SchoolSchema>;

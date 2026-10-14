@@ -2,7 +2,9 @@ import { z } from "zod";
 import rawSteps from "@/data/steps.json";
 import rawCommunities from "@/data/communities.json";
 import rawSchools from "@/data/schools.json";
-import { CommunitySchema, SchoolSchema, StepSchema } from "./schema";
+import rawProviders from "@/data/providers.json";
+import rawLiving from "@/data/living.json";
+import { CommunitySchema, ProviderSchema, SchoolSchema, StepSchema } from "./schema";
 
 function assertUniqueIds(items: { id: string }[], label: string) {
   const ids = new Set<string>();
@@ -15,6 +17,9 @@ function assertUniqueIds(items: { id: string }[], label: string) {
 export const steps = z.array(StepSchema).parse(rawSteps);
 export const communities = z.array(CommunitySchema).parse(rawCommunities);
 export const schools = z.array(SchoolSchema).parse(rawSchools);
+export const providers = z.array(ProviderSchema).parse(rawProviders);
+/** Sample community groups (illustrative; shown as demo data). */
+export const communityGroups = z.object({ groups: z.array(z.object({ id: z.string(), name: z.string(), summary: z.string(), goodFor: z.array(z.string()), illustrative: z.boolean() }).strict()) }).parse(rawLiving).groups;
 assertUniqueIds(steps, "step");
 assertUniqueIds(communities, "community");
 assertUniqueIds(schools, "school");
@@ -42,4 +47,6 @@ for (const school of schools) {
   if (!communityIds.has(school.communityId)) throw new Error(`Unknown school community: ${school.communityId}`);
 }
 
-export const data = { steps, communities, schools };
+for (const provider of providers) for (const id of provider.steps) if (!byId.has(id)) throw new Error(`Provider ${provider.id} points to unknown step ${id}`);
+
+export const data = { steps, communities, schools, providers };

@@ -85,6 +85,7 @@
     "durationLabel": "Usually 30–60 days",
     "why": "Clara files it, and your bank account, visa and incentives all wait on it.",
     "milestone": true,
+    "thirdParty": true,
     "provider": "ADGM, issued via Clara",
     "officialLink": "https://www.adgm.com",
     "tips": [
