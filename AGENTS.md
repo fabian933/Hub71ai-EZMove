@@ -39,7 +39,7 @@ The positioning is enterprise mobility, but the copy speaks Hub71's language: Cl
 - `npm run check:graph` checks ids, edges, cycles, phase order and lane rules. Run it after any data change.
 
 ## Stack
-Next.js (App Router), TypeScript, Tailwind, zod, lucide-react.
+Next.js (App Router), TypeScript, Tailwind, d3-force, framer-motion, zod, lucide-react.
 OpenAI via the official `openai` npm package (Responses API, structured outputs), model from env OPENAI_MODEL.
 Deployed on Vercel. No database: data lives in /data/*.json, user progress in localStorage, profile shareable via URL param.
 
